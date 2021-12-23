@@ -4,7 +4,7 @@ import com.config.*;
 import com.member.*;
 
 public class main {
-
+//test
     public static void main(String[] args) {
 
         //Exemple de récupération d'un lien depuis le fichier de config
