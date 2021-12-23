@@ -7,6 +7,8 @@ public class main {
 //test
     public static void main(String[] args) {
 
+        //Coucou Martin
+
         //Exemple de récupération d'un lien depuis le fichier de config
         System.out.println(ReadProperties.getConfig("linkBDD"));
         System.out.println(ReadProperties.getConfig("loginBDD"));
