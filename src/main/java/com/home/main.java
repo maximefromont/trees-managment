@@ -6,7 +6,7 @@ import com.member.*;
 public class main {
 //test
     public static void main(String[] args) {
-
+/*
         //Coucou Martin
 
         //Exemple de récupération d'un lien depuis le fichier de config
@@ -22,7 +22,8 @@ public class main {
             System.out.println("birth = "+member.getBirth());
             System.out.println("adress = "+member.getAdress());
             System.out.println("registrationDate = "+member.getRegistrationDate());
-        }
+        }*/
+        launchControl.main();
 
     }
 
