@@ -59,26 +59,28 @@ public class Member {
         int year=dt.getYear();
         anneeCotisation=year+1900;
         updateMember();
-        a.updateBudget(c);
+        a.newrecette(c);
     }
 
     public void vote (/* les arbres de son choix */){}
-    public void visite (){} // /\nbr de visite limité/\
+    public void visite (){
+        resteVisite-=1;
+    } // /\nbr de visite limité/\
 
     @Override
     public String toString() {
         return "Member{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
-                ", birth='" + birth + '\'' +
-                ", adress='" + adress + '\'' +
-                ", registrationDate='" + registrationDate + '\'' +
+                ", name='" + name + '\n' +
+                ", birth='" + birth + '\n' +
+                ", adress='" + adress + '\n' +
+                ", registrationDate='" + registrationDate + '\n' +
                 ", cotisation=" + cotisation +
                 '}';
     }
 
-    public void RGPD (){
-        String fileName = "data.txt";
+    public void RGPD (){ //Pour le moment le fichier est dans le projet, trouver le moyen de faire une adresse générique ou un mail
+        String fileName = name+"_"+id+"_data.txt";
         String encoding = "UTF-8";
         try{
             PrintWriter writer = new PrintWriter(fileName, encoding);
