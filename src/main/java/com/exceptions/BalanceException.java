@@ -1,4 +1,4 @@
-package com.err;
+package com.exceptions;
 
 import java.io.IOException;
 
