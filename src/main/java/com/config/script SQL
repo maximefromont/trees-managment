@@ -1,0 +1,67 @@
+DROP TABLE IF EXISTS public.activity;
+DROP TABLE IF EXISTS public.cotisation;
+DROP TABLE IF EXISTS public.member;
+DROP TABLE IF EXISTS public.association;
+
+CREATE TABLE IF NOT EXISTS public.association
+(
+    id SERIAL PRIMARY KEY,
+    name varchar(250) NOT NULL,
+    recette integer NOT NULL,
+	depense integer NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS public.member
+(
+    id SERIAL PRIMARY KEY,
+	id_association integer NOT NULL,
+	type varchar(250) NOT NULL,
+    name varchar(250) NOT NULL,
+    birth varchar(250),
+    adress varchar(500),
+    registrationDate varchar(250),
+	FOREIGN KEY(id_association) REFERENCES association(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS public.activity
+(
+    id SERIAL PRIMARY KEY,
+    id_member integer NOT NULL,
+    name varchar(1000) NOT NULL,
+    date varchar(250) NOT NULL,
+    FOREIGN KEY(id_member) REFERENCES member(id)
+);
+
+CREATE TABLE IF NOT EXISTS public.cotisation
+(
+    id SERIAL PRIMARY KEY,
+    id_member integer NOT NULL,
+    prix integer NOT NULL,
+    date varchar(250) NOT NULL,
+    paid boolean DEFAULT false,
+    FOREIGN KEY(id_member) REFERENCES member(id) ON DELETE CASCADE
+);
+
+INSERT INTO association VALUES
+(DEFAULT, 'Assos 1', 0, 0),
+(DEFAULT, 'Assos 2', 0, 0);
+
+INSERT INTO member VALUES
+(DEFAULT, 1, 'assosMember', 'Maxime', '30/04/2001', '9 rue Marcel Pagnol, Avrillé, 49240', '3/12/2021'),
+(DEFAULT, 2, 'assosMember', 'Martin', 'mdr je sais pas', 'Quelque part à massy', '5/12/2021'),
+(DEFAULT, 1, 'donor', 'Bastien', 'Bon', 'Dans une grotte', '10/12/2021');
+
+INSERT INTO activity VALUES
+(DEFAULT, 1, 'A codé en java', '21/12/2021'),
+(DEFAULT, 2, 'A codé en c++', '30/09/2021'),
+(DEFAULT, 3, 'A codé en python', '05/09/2001');
+
+INSERT INTO cotisation VALUES
+(DEFAULT, 1, 15, '21/12/2021', true),
+(DEFAULT, 2, 30, '21/12/2021', false),
+(DEFAULT, 3, 20, '21/12/2021', false);
+
+--SELECT * FROM association;
+SELECT * FROM member;
+--SELECT * FROM activity;
+--SELECT * FROM cotisation;
