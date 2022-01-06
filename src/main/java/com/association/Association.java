@@ -1,14 +1,25 @@
 package com.association;
 
-import com.err.BalanceException;
+import com.exceptions.BalanceException;
 import com.member.Member;
 
 public class Association {
-    private int budget,recette,depense;
 
-    public int getBudget() {
-        return budget;
+    private int id;
+    private String name;
+    private int recette;
+    private int depense;
+
+    public Association(int id, String name, int recette, int depense){
+        this.id = id;
+        this.name = name;
+        this.recette = recette;
+        this.depense = depense;
     }
+
+    public int getId() {return id;}
+
+    public String getName() {return name;}
 
     public int getDepense() {
         return depense;
@@ -18,21 +29,28 @@ public class Association {
         return recette;
     }
 
-    public Association(){
-        recette=0;
-        depense=0;
-        budget=recette-depense;
+    public int getBudget() {
+        return recette-depense;
+    }
+
+    @Override
+    public String toString() {
+        return "Association : " + "\n" +
+                "id=" + getId() + "\n" +
+                "name=" + getName() + '\n' +
+                "recette=" + getRecette() + '\n' +
+                "depense=" + getDepense() + '\n' +
+                "budget=" + getBudget();
     }
 
     //Faire une classe erreur budget < 0 pour defraiement
     public void defraiement(int cout,Member... a){}
     public void factures(int fac) throws BalanceException {
-        if(budget-(depense+fac)<0){
+        if(getBudget()-(depense+fac)<0){
             throw new BalanceException("Solde insufisant");
         }
         else {
             depense += fac;
-            updateBudget();
             updateAssos();
         }
     }
@@ -40,12 +58,8 @@ public class Association {
 
     public void newrecette(int add){
         recette+=add;
-        updateBudget();
     }
-    public void updateBudget(){
-        budget=recette-depense;
-        updateAssos();
-    }
+
     public void updateAssos(){
         //update bdd
     }
