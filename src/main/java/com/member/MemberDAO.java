@@ -34,12 +34,30 @@ public class MemberDAO {
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("SELECT * FROM public.member");
             while (resultSet.next()) {
-                members.add(new Member(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4), resultSet.getString(5)));
+                members.add(new Member(resultSet.getInt(1), resultSet.getInt(2), resultSet.getString(3), resultSet.getString(4), resultSet.getString(5), resultSet.getString(6), resultSet.getString(7)));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
         return members;
+    }
+    
+    public static Member getMemberById(int id) {
+        
+        Member member = null;
+        
+        Connection connection = getConnection();
+
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM public.member WHERE id="+id);
+            resultSet.next();
+            member = new Member(resultSet.getInt(1), resultSet.getInt(2), resultSet.getString(3), resultSet.getString(4), resultSet.getString(5), resultSet.getString(6), resultSet.getString(7));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return member;
     }
 }

@@ -6,23 +6,23 @@ import java.io.*;
 public class Member {
 
     private int id;
+    private int id_association;
+    private String type;
     private String name;
     private String birth;
     private String adress;
     private String registrationDate;
-    private int cotisation;
-    private int anneeCotisation;
     private int resteVisite;
 
-    public Member(int id, String name, String birth, String adress, String registrationDate) {
+    public Member(int id, int id_association, String type, String name, String birth, String adress, String registrationDate) {
         this.id = id;
+        this.id_association = id_association;
+        this.type = type;
         this.name = name;
         this.birth = birth;
         this.adress = adress;
         this.registrationDate = registrationDate;
-        cotisation = 0;
         resteVisite = 5;
-        //il est possible de l'enregistrer dans la BDD ici ?
     }
 
     public int getId() {
@@ -45,22 +45,11 @@ public class Member {
         return registrationDate;
     }
 
-    public int getCotisation() {
-        return cotisation;
-    }
+    public int getId_association() {return id_association;}
 
-    public int getAnneeCotisation() {
-        return anneeCotisation;
-    }
+    public String getType() {return type;}
 
-    public void cotisation (int c, Association a){
-        cotisation+=c;
-        Date dt=new Date();
-        int year=dt.getYear();
-        anneeCotisation=year+1900;
-        updateMember();
-        a.newrecette(c);
-    }
+
 
     public void vote (/* les arbres de son choix */){}
     public void visite (){
@@ -69,30 +58,17 @@ public class Member {
 
     @Override
     public String toString() {
-        return "Member{" +
-                "id=" + id +
-                ", name='" + name + '\n' +
-                ", birth='" + birth + '\n' +
-                ", adress='" + adress + '\n' +
-                ", registrationDate='" + registrationDate + '\n' +
-                ", cotisation=" + cotisation +
-                '}';
+        return "Member : " + "\n" +
+                "id=" + getId() + "\n" +
+                "id_association=" + getId_association() + '\n' +
+                "type=" + getType() + '\n' +
+                "name=" + getName() + '\n' +
+                "birth=" + getBirth() + '\n' +
+                "adress=" + getAdress() + '\n' +
+                "registrationDate=" + getRegistrationDate();
     }
 
-    public void RGPD (){ //Pour le moment le fichier est dans le projet, trouver le moyen de faire une adresse générique ou un mail
-        String fileName = name+"_"+id+"_data.txt";
-        String encoding = "UTF-8";
-        try{
-            PrintWriter writer = new PrintWriter(fileName, encoding);
-            writer.println(this.toString());
-            writer.close();
-        }
-        catch (IOException e){
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
-    }
-
+    //Ca sert à quoi ?
     public static void  auRevoir(){
         Date dt=new Date();
         int year=dt.getYear();
@@ -103,9 +79,5 @@ public class Member {
                 //Supression BDD
             }
         } */
-    }
-
-    public void updateMember(){
-        //update bdd
     }
 }
