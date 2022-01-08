@@ -120,7 +120,19 @@ public class MemberDAO {
             preparedStatement.setString(7, adress);
             preparedStatement.setString(8, DateTimeFormatter.ofPattern("dd/MM/yyyy").format(LocalDate.now()));
             preparedStatement.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
+    public static void deleteMember(Member member) {
+
+        Connection connection = getConnection();
+
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM public.member WHERE id=?;");
+            preparedStatement.setInt(1, member.getId());
+            preparedStatement.execute();
         } catch (SQLException e) {
             e.printStackTrace();
         }

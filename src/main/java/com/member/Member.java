@@ -54,6 +54,8 @@ public class Member {
 
     public int getId_association() {return id_association;}
 
+    public boolean isMember() {return type;}
+
     public String getType() {
         if(type)
             return "membre";
