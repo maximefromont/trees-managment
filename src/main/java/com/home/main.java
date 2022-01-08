@@ -17,9 +17,9 @@ public class main {
         int answer = -1;
         while (answer < 0) {
 
-            System.out.println("1 - Créer un compte.");
-            System.out.println("2 - Se connecter.");
-            System.out.println("0 - Quitter le programme.");
+            System.out.println("1 - Créer un compte");
+            System.out.println("2 - Se connecter");
+            System.out.println("0 - Quitter le programme");
 
             try{
                 System.out.print("\n" + "Votre choix : ");
@@ -59,7 +59,7 @@ public class main {
         boolean verifLogin = false;
         while(!verifLogin) {
             System.out.print("\n" + "Veuillez renseigner un login sous forme d'adresse email : ");
-            String tempLogin = new Scanner(System.in).nextLine();
+            String tempLogin = new Scanner(System.in).next();
             if(MemberDAO.getMemberByLogin(tempLogin) == null) {
                 verifLogin = true;
                 login = tempLogin;
@@ -71,9 +71,9 @@ public class main {
         boolean verifPassword = false;
         while(!verifPassword) {
             System.out.print("\n" + "Veuillez renseigner un mot de passe : ");
-            String tempMdp = new Scanner(System.in).nextLine();
+            String tempMdp = new Scanner(System.in).next();
             System.out.print("Veuillez confirmer votre mot de passe : ");
-            String tempMdp2 = new Scanner(System.in).nextLine();
+            String tempMdp2 = new Scanner(System.in).next();
             if(tempMdp.equals(tempMdp2)) {
                 verifPassword = true;
                 mdp = tempMdp;
@@ -87,7 +87,7 @@ public class main {
 
         //Pas de vérification attention
         System.out.print("\n" + "Veuillez indiquer votre date d'anniversaire en respectant le format JJ/MM/AAAA : ");
-        birth = new Scanner(System.in).nextLine();
+        birth = new Scanner(System.in).next();
 
         System.out.print("\n" + "Veuillez indiquer votre adresse postale : ");
         adress = new Scanner(System.in).nextLine();
@@ -121,24 +121,22 @@ public class main {
 
     }
 
-    private static void login() throws IOException {
-
-        //Changer le numéro pour changer de membre
-        //Dans les données de bases de la base, 1 = Maxime, 2 = Martin et 3 = Bastien
-        //Member memberTest = MemberDAO.getMemberById(2);
+    private static void login() {
 
         System.out.print("\n" + "Bienvenue, veuillez indiquer votre login : ");
-        Member member = MemberDAO.getMemberByLogin(new Scanner(System.in).nextLine());
-        System.out.print("Et votre mot de passe : ");
-        String password = new Scanner(System.in).nextLine();
+        Member member = MemberDAO.getMemberByLogin(new Scanner(System.in).next());
+        if(member != null) {
+            System.out.print("Et votre mot de passe : ");
+            String password = new Scanner(System.in).next();
 
-        if(password.equals(member.getMdp())) {
-            System.out.println("\n" + "Bienvenue "+member.getName()+" ! Lancement du programme.");
-            launchControl.menu(member);
+            if(password.equals(member.getMdp())) {
+                System.out.println("\n" + "Bienvenue "+member.getName()+" ! Lancement du programme.");
+                launchControl.menu(member);
+            } else {
+                System.out.println("Le mot de passe est incorrecte.");
+            }
         } else {
-            System.out.println("L'identifiant ou le mot de passe est incorrect.");
+            System.out.println("L'identifiant est incorrecte.");
         }
-
     }
-
 }
