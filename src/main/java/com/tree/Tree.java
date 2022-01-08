@@ -1,9 +1,9 @@
 package com.tree;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Scanner;
-import java.util.Vector;
 
 public class Tree {
     private int id, cir, height;
@@ -20,11 +20,11 @@ public class Tree {
         remarquable=remcsv;
     }
 
-    private static Vector treesCSV() throws FileNotFoundException {
+    private static ArrayList<Tree> treesCSV() throws FileNotFoundException {
         File getCSVFile = new File("java_project/src/main/ressources/les-arbres.csv");
         Scanner sc = new Scanner(getCSVFile);
         sc.useDelimiter(";");
-        Vector Retour = new Vector();
+        ArrayList<Tree> Retour = new ArrayList<Tree>();
         while (sc.hasNext()){
             int id= Integer.parseInt(sc.next());
             sc.next();
@@ -60,9 +60,18 @@ public class Tree {
     }
 
     public static void printTree() throws FileNotFoundException {
-        Vector liste = treesCSV();
+        ArrayList<Tree> liste = treesCSV();
         for (int i = 0; i<liste.size();i++){
             liste.get(i).showMe();
+        }
+    }
+
+    public static void orintTree(String lieu) throws FileNotFoundException {
+        ArrayList<Tree> liste = treesCSV();
+        for (int i = 0; i<liste.size();i++){
+            if(lieu==liste.get(i).location) {
+                liste.get(i).showMe();
+            }
         }
     }
 }
