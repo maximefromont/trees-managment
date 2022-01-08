@@ -4,6 +4,8 @@ import com.activity.Activity;
 import com.activity.ActivityDAO;
 import com.association.Association;
 import com.association.AssociationDAO;
+import com.association.Finance;
+import com.association.FinanceDAO;
 import com.cotisation.Cotisation;
 import com.cotisation.CotisationDAO;
 import com.member.Member;
@@ -116,6 +118,17 @@ public class launchControl {
 
         try{
             PrintWriter writer = new PrintWriter(fileName, encoding);
+            //Finances
+            writer.println("Finances pour l'année " + year);
+            Finance finance = FinanceDAO.getFinanceForYear(associationMember, year);
+            if (finance == null) {
+                writer.println("Pas de finances pour l'année " + year);
+            }
+            else {
+                writer.println("Dépenses : " +finance.getDepense());
+                writer.println("Recettes : " +finance.getRecette());
+            }
+            //Activité
             writer.println("Rapport d'activité pour l'année " + year);
             writer.println("--------------------");
             if (activities.size() == 0)
