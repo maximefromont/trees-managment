@@ -9,12 +9,13 @@ import com.cotisation.Cotisation;
 import com.cotisation.CotisationDAO;
 import com.member.*;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException {
 
         /*
         //Exemple de récupération d'un lien depuis le fichier de config

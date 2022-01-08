@@ -5,11 +5,15 @@ import com.association.AssociationDAO;
 import com.cotisation.Cotisation;
 import com.cotisation.CotisationDAO;
 import com.member.Member;
+import com.tree.Tree;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class launchControl {
@@ -17,7 +21,7 @@ public class launchControl {
     private static Member member;
     private static Association associationMember;
 
-    public static void menu(Member memberRecu) {
+    public static void menu(Member memberRecu) throws FileNotFoundException {
 
         //Initialisation des variable static member et association
         member = memberRecu;
@@ -42,7 +46,7 @@ public class launchControl {
                 displayRGPD();
                 break;
             case 3:
-
+                printTree();
                 break;
         }
     }
@@ -97,4 +101,50 @@ public class launchControl {
         }
     }
 
+    private static ArrayList<Tree> treesCSV() throws FileNotFoundException {
+        File getCSVFile = new File("src/main/resources/les-arbres.csv");
+        Scanner sc = new Scanner(getCSVFile);
+        sc.useDelimiter(";|\\n");
+        ArrayList<Tree> Retour = new ArrayList<Tree>();
+        sc.next();sc.next();sc.next();sc.next();sc.next();sc.next();sc.next();sc.next();sc.next();sc.next();sc.next();sc.next();sc.next();sc.next();sc.next();sc.next();
+        while (sc.hasNext()){
+            String id= sc.next();
+            sc.next();
+            sc.next();
+            String loc=sc.next();
+            sc.next();
+            sc.next();
+            sc.next();
+            sc.next();
+            String name = sc.next();
+            String type = sc.next();
+            String spe = sc.next();
+            sc.next();
+            String cir = sc.next();
+            String hei = sc.next();
+            sc.next();
+            String rem = sc.next();
+            boolean remar = !Objects.equals(rem, "NON");
+            sc.next();
+            Retour.add(new Tree(id,cir,hei,loc,name,type,spe,remar));
+           // System.out.println(Retour.size());
+        }
+       // Retour.remove(0);
+        return Retour;
+    }
+    public static void printTree() throws FileNotFoundException {
+        ArrayList<Tree> liste = treesCSV();
+        for (int i = 0; i<liste.size();i++){
+            System.out.println(liste.get(i).showMe());
+        }
+    }
+
+    public static void orintTree(String lieu) throws FileNotFoundException {
+        ArrayList<Tree> liste = treesCSV();
+        for (int i = 0; i<liste.size();i++){
+            if(lieu==liste.get(i).getLocation()) {
+                System.out.println(liste.get(i).showMe());
+            }
+        }
+    }
 }
