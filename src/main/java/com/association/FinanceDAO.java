@@ -25,23 +25,22 @@ public class FinanceDAO {
         return connection;
     }
 
-    public static ArrayList<Finance> getFinanceForYear(Association association, String year) {
+    public static Finance getFinanceForYear(Association association, String year) {
 
-        ArrayList<Finance> finances = new ArrayList<Finance>();
+        Finance finance = null;
 
         Connection connection = getConnection();
 
         try {
             Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM public.finance WHERE id_association="+association.getId()+" AND date="+year);
-            while (resultSet.next()) {
-                finances.add(new Finance(resultSet.getInt(1), resultSet.getInt(2), resultSet.getInt(3), resultSet.getInt(4), resultSet.getString(5)));
-            }
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM public.finance WHERE id_association="+association.getId()+" AND date='"+year+"';");
+            resultSet.next();
+            finance = new Finance(resultSet.getInt(1), resultSet.getInt(2), resultSet.getInt(3), resultSet.getInt(4), resultSet.getString(5));
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        return finances;
+        return finance;
     }
 
 }

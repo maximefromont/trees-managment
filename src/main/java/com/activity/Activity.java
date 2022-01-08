@@ -1,5 +1,7 @@
 package com.activity;
 
+import com.member.MemberDAO;
+
 public class Activity {
 
     private int id;
@@ -29,5 +31,11 @@ public class Activity {
                 "id_member=" + getId_member() + '\n' +
                 "name=" + getName() + '\n' +
                 "date=" + getDate();
+    }
+
+    public String info() {
+        return "A la date : " + getDate() + "\n" +
+                "Le membre " + MemberDAO.getMemberById(getId_member()).getName() + "\n" +
+                getName() + "\n";
     }
 }

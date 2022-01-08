@@ -64,6 +64,24 @@ public class AssociationDAO {
 
     }
 
+    public  static  Association getAssociationById(int id) {
+
+        Connection connection = getConnection();
+        Association association = null;
+
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM public.association WHERE id="+id);
+            resultSet.next();
+            association = new Association(resultSet.getInt(1), resultSet.getString(2));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return association;
+
+    }
+
     public static void updateRecette(Association association) {
 
         Connection connection = getConnection();

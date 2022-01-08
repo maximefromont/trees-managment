@@ -1,7 +1,11 @@
 package com.home;
 
+import com.activity.Activity;
+import com.activity.ActivityDAO;
 import com.association.Association;
 import com.association.AssociationDAO;
+import com.association.Finance;
+import com.association.FinanceDAO;
 import com.cotisation.Cotisation;
 import com.cotisation.CotisationDAO;
 import com.member.Member;
@@ -36,6 +40,7 @@ public class launchControl {
         System.out.println("\n" + "Menu : " + "\n" +
                 "1: Payer sa cotisation" + "\n" +
                 "2: RGPD" + "\n" +
+                "3: Rapport d'activité \n" +
                 "Quelle fonction voulez-vous effectuer ? : ");
         Scanner s = new Scanner(System.in);
         switch (s.nextInt()){
@@ -46,6 +51,9 @@ public class launchControl {
                 displayRGPD();
                 break;
             case 3:
+                getActivityReport();
+                break;
+            case 4:
                 printTree();
                 break;
         }
@@ -99,6 +107,72 @@ public class launchControl {
             System.out.println("Une erreur durant l'impression du fichier RGPD à eu lieu.");
             e.printStackTrace();
         }
+    }
+
+    private static void activityReportForYear(String year) {
+
+        ArrayList<Activity> activities = ActivityDAO.getAllActivitiesByYear(year);
+
+        String fileName = "activity_report_for_year_" + year + ".txt";
+        String encoding = "UTF-8";
+
+        try{
+            PrintWriter writer = new PrintWriter(fileName, encoding);
+            //Finances
+            writer.println("Finances pour l'année " + year);
+            Finance finance = FinanceDAO.getFinanceForYear(associationMember, year);
+            if (finance == null) {
+                writer.println("Pas de finances pour l'année " + year);
+            }
+            else {
+                writer.println("Dépenses : " +finance.getDepense());
+                writer.println("Recettes : " +finance.getRecette());
+            }
+            //Activité
+            writer.println("Rapport d'activité pour l'année " + year);
+            writer.println("--------------------");
+            if (activities.size() == 0)
+            {
+                writer.println("Pas d'activité cette année");
+                writer.println("--------------------");
+            }
+            else {
+                for (Activity activity : activities) {
+                    writer.println(activity.info());
+                    writer.println("--------------------");
+                }
+            }
+            writer.close();
+
+            System.out.println("Un fichier de format txt à été imprimé dans java project.");
+        }
+        catch (IOException e){
+            System.out.println("Une erreur durant l'impression du rapport d'activité à eu lieu.");
+            e.printStackTrace();
+        }
+
+    }
+
+    private static void getActivityReport() {
+        int year = 0;
+        boolean condition = false;
+
+        while (!condition) {
+            try{
+                System.out.print("\n" + "Veuillez indiquer l'année du rapport : ");
+                year = new Scanner(System.in).nextInt();
+            } catch (InputMismatchException e) {
+                System.out.println("Erreur, vous devez rentrer une année valide.");
+            }
+
+            condition = true;
+            if(year < 1900 || year > 2100) {
+                System.out.println("Erreur, vous devez rentrer une année valide.");
+                condition = false;
+            }
+        }
+
+        activityReportForYear(String.valueOf(year));
     }
 
     private static ArrayList<Tree> treesCSV() throws FileNotFoundException {
