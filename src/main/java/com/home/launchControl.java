@@ -24,7 +24,7 @@ public class launchControl {
     private static Member member;
     private static Association associationMember;
 
-    public static void menu(Member memberRecu) throws IOException {
+    public static void menu(Member memberRecu) {
 
         //Initialisation des variable static member et association
         member = memberRecu;
@@ -54,7 +54,7 @@ public class launchControl {
                         displayRGPD();
                         break;
                     case 3:
-                        printTree();
+                        treesCSV();
                         break;
                     case 4:
                         deleteAccount();
@@ -89,6 +89,11 @@ public class launchControl {
         }
 
         exitProgram();
+    }
+
+    private static void exitProgram() {
+        System.out.println("\n" + "Merci d'avoir utilisé le programme. Au revcoir !");
+        System.exit(0);
     }
 
 
@@ -229,14 +234,19 @@ public class launchControl {
     }
 
 
-    private static void treesCSV() throws IOException {
+    private static void treesCSV() {
 
-        List<Tree> arbre = new CsvToBeanBuilder(new FileReader("src/main/resources/les-arbres.csv"))
-                .withType(Tree.class)
-                .withSeparator(';')
-                .build()
-                .parse();
-        System.out.println(arbre);
+        try {
+            List<Tree> arbre = new CsvToBeanBuilder(new FileReader("src/main/resources/les-arbres.csv"))
+                    .withType(Tree.class)
+                    .withSeparator(';')
+                    .build()
+                    .parse();
+            System.out.println(arbre);
+        } catch(IOException e) {
+            System.out.println("Erreur, le fichier 'les-arbres.csv' n'a pas été trouvé.");
+            e.printStackTrace();
+        }
     }
     /*
     public static void printTree() throws FileNotFoundException {
