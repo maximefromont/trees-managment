@@ -25,6 +25,14 @@ CREATE TABLE IF NOT EXISTS public.member
 	FOREIGN KEY(id_association) REFERENCES association(id) ON DELETE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS public.vote
+(
+	id SERIAL PRIMARY KEY,
+	id_member integer NOT NULL,
+	id_arbre integer NOT NULL,
+	FOREIGN KEY(id_member) REFERENCES member(id) ON DELETE CASCADE
+);
+
 CREATE TABLE IF NOT EXISTS public.activity
 (
     id SERIAL PRIMARY KEY,
