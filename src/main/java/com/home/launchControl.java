@@ -9,6 +9,7 @@ import com.member.Member;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class launchControl {
@@ -41,15 +42,29 @@ public class launchControl {
                 displayRGPD();
                 break;
             case 3:
+
                 break;
         }
     }
 
     private static void payCotisation() {
 
-        System.out.print("\n" + "Veuillez indiquer le montant de votre cotisation : ");
-        Scanner s = new Scanner(System.in);
-        CotisationDAO.createNewCotisation(member, s.nextInt(), true);
+        int montant = -1;
+
+        while (montant <= 0) {
+            try{
+                System.out.print("\n" + "Veuillez indiquer le montant de votre cotisation : ");
+                montant = new Scanner(System.in).nextInt();
+            } catch (InputMismatchException e) {
+                System.out.println("Erreur, vous devez rentrer un nombre entier.");
+            }
+
+            if(montant <= 0) {
+                System.out.println("Veuillez faire attention à ce que le montant renseigné soit supérieur à 0.");
+            }
+        }
+
+        CotisationDAO.createNewCotisation(member, montant, true);
 
         System.out.println("\n" + "Voici le résumé de votre cotisation : " + "\n");
         ArrayList<Cotisation> cotisations = CotisationDAO.getAllCotisationForMember(member);
@@ -81,4 +96,5 @@ public class launchControl {
             e.printStackTrace();
         }
     }
+
 }
