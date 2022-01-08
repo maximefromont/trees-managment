@@ -6,12 +6,13 @@ import com.association.AssociationDAO;
 import com.member.*;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class main {
 
-    public static void main(String[] args) throws FileNotFoundException {
+    public static void main(String[] args) throws IOException {
 
         int answer = -1;
         while (answer < 0) {
@@ -45,7 +46,7 @@ public class main {
 
     }
 
-    private static void register() throws FileNotFoundException {
+    private static void register() throws IOException {
 
         Association association = AssociationDAO.getAssociationById(1); //Association 1 en dur
         boolean type = false;
@@ -120,7 +121,7 @@ public class main {
 
     }
 
-    private static void login() throws FileNotFoundException {
+    private static void login() throws IOException {
 
         //Changer le numéro pour changer de membre
         //Dans les données de bases de la base, 1 = Maxime, 2 = Martin et 3 = Bastien
