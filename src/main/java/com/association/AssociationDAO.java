@@ -37,7 +37,7 @@ public class AssociationDAO {
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("SELECT * FROM public.association");
             while (resultSet.next()) {
-                associations.add(new Association(resultSet.getInt(1), resultSet.getString(2), resultSet.getInt(3), resultSet.getInt(4)));
+                associations.add(new Association(resultSet.getInt(1), resultSet.getString(2)));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -55,7 +55,7 @@ public class AssociationDAO {
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("SELECT * FROM public.association WHERE id="+member.getId_association());
             resultSet.next();
-            association = new Association(resultSet.getInt(1), resultSet.getString(2), resultSet.getInt(3), resultSet.getInt(4));
+            association = new Association(resultSet.getInt(1), resultSet.getString(2));
         } catch (SQLException e) {
             e.printStackTrace();
         }
