@@ -46,6 +46,7 @@ public class Tree {
             sc.next();
             Retour.add(new Tree(id,cir,hei,loc,name,type,spe,remar));
         }
+        Retour.remove(0);
         return Retour;
     }
 
