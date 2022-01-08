@@ -1,9 +1,13 @@
 package com.activity;
 
 import java.sql.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
+import com.association.Association;
 import com.config.*;
+import com.member.Member;
 
 public class ActivityDAO {
 
@@ -60,5 +64,21 @@ public class ActivityDAO {
         }
 
         return activities;
+    }
+
+    public static void createNewActivity(Association association, String name) {
+
+        Connection connection = getConnection();
+
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO public.activity VALUES (DEFAULT, ?, ?, ?);");
+            preparedStatement.setInt(1, association.getId());
+            preparedStatement.setString(2, name);
+            preparedStatement.setString(3, DateTimeFormatter.ofPattern("dd/MM/yyyy").format(LocalDateTime.now())); //Date à l'instant
+            preparedStatement.execute();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

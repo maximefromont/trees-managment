@@ -1,16 +1,11 @@
 package com.home;
 
-import com.activity.Activity;
 import com.activity.ActivityDAO;
 import com.association.Association;
 import com.association.AssociationDAO;
-import com.config.*;
-import com.cotisation.Cotisation;
-import com.cotisation.CotisationDAO;
 import com.member.*;
 
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -118,6 +113,7 @@ public class main {
 
         Member member = MemberDAO.getLastMember();
 
+        ActivityDAO.createNewActivity(association, "Création d'un compte de type : " + member.getType() + " et de login : "+member.getLogin() +" (id = "+member.getId()+").");
         System.out.println("\n" + "Bienvenue "+member.getName()+"! Lancement du programme.");
 
         launchControl.menu(member);

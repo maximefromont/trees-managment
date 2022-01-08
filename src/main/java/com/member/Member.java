@@ -1,8 +1,7 @@
 package com.member;
-import com.association.Association;
 
 import java.util.Date;
-import java.io.*;
+
 public class Member {
 
     private int id;
@@ -55,8 +54,12 @@ public class Member {
 
     public int getId_association() {return id_association;}
 
-    public boolean isMember() {return type;}
-    public boolean isDonor() {return !type;}
+    public String getType() {
+        if(type)
+            return "membre";
+        else
+            return "doneur";
+    }
 
     //A reecrire en dehors de membre
     public void visite (){
@@ -68,7 +71,7 @@ public class Member {
         return "Member : " + "\n" +
                 "id=" + getId() + "\n" +
                 "id_association=" + getId_association() + '\n' +
-                "type=" + isMember() + '\n' +
+                "type=" + getType() + '\n' +
                 "login=" + getLogin() + "\n" +
                 "mdp=" + getMdp() + "\n" +
                 "name=" + getName() + '\n' +
