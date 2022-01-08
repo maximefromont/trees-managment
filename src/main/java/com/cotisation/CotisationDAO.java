@@ -111,7 +111,7 @@ public class CotisationDAO {
             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO public.cotisation VALUES (DEFAULT, ?, ?, ?, ?);");
             preparedStatement.setInt(1, member.getId());
             preparedStatement.setInt(2, prix);
-            preparedStatement.setString(3, DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss").format(LocalDateTime.now())); //Date et heure à l'instant
+            preparedStatement.setString(3, DateTimeFormatter.ofPattern("dd/MM/yyyy").format(LocalDateTime.now())); //Date à l'instant
             preparedStatement.setBoolean(4, paid);
             preparedStatement.execute();
 
