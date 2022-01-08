@@ -115,9 +115,6 @@ public class CotisationDAO {
             preparedStatement.setBoolean(4, paid);
             preparedStatement.execute();
 
-            ResultSet resultSet = preparedStatement.getGeneratedKeys();
-
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
