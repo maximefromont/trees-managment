@@ -7,14 +7,14 @@ public class Member {
 
     private int id;
     private int id_association;
-    private String type;
+    private boolean type;
     private String name;
     private String birth;
     private String adress;
     private String registrationDate;
     private int resteVisite;
 
-    public Member(int id, int id_association, String type, String name, String birth, String adress, String registrationDate) {
+    public Member(int id, int id_association, boolean type, String name, String birth, String adress, String registrationDate) {
         this.id = id;
         this.id_association = id_association;
         this.type = type;
@@ -47,11 +47,10 @@ public class Member {
 
     public int getId_association() {return id_association;}
 
-    public String getType() {return type;}
+    public boolean isMember() {return type;}
+    public boolean isDonor() {return !type;}
 
-
-
-    public void vote (/* les arbres de son choix */){}
+    //A reecrire en dehors de membre
     public void visite (){
         resteVisite-=1;
     } // /\nbr de visite limité/\
@@ -61,7 +60,7 @@ public class Member {
         return "Member : " + "\n" +
                 "id=" + getId() + "\n" +
                 "id_association=" + getId_association() + '\n' +
-                "type=" + getType() + '\n' +
+                "type=" + isMember() + '\n' +
                 "name=" + getName() + '\n' +
                 "birth=" + getBirth() + '\n' +
                 "adress=" + getAdress() + '\n' +
