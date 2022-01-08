@@ -68,12 +68,17 @@ INSERT INTO association VALUES
 
 INSERT INTO finance VALUES
 (DEFAULT, 1, 310, 250, '2020'),
-(DEFAULT, 1, 0, 0, '2021');
+(DEFAULT, 1, 0, 0, '2021'),
+(DEFAULT, 2, 120, 50, '2020'),
+(DEFAULT, 2, 0, 0, '2021');
 
 INSERT INTO activity VALUES
 (DEFAULT, 1, 'A codé en java', '21/12/2021'),
 (DEFAULT, 1, 'A codé en c++', '30/09/2021'),
-(DEFAULT, 1, 'A codé en python', '05/09/2001');
+(DEFAULT, 1, 'A codé en python', '05/09/2001'),
+(DEFAULT, 1, 'A jouer à minecraft', '03/12/2020'),
+(DEFAULT, 1, 'A fait de la medecine', '05/09/2020'),
+(DEFAULT, 1, 'A hacker la nasa en python', '07/09/2000');
 
 INSERT INTO member VALUES
 (DEFAULT, 1, true, 'max', 'mdp', 'Maxime', '30/04/2001', '9 rue Marcel Pagnol, Avrillé, 49240', '3/12/2021'),
