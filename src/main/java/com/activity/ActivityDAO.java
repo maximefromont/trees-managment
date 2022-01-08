@@ -42,4 +42,23 @@ public class ActivityDAO {
 
         return activities;
     }
+
+    public static ArrayList<Activity> getAllActivitiesByYear(String year) {
+
+        ArrayList<Activity> activities = new ArrayList<Activity>();
+
+        Connection connection = getConnection();
+
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM public.activity where date LIKE '%" + year + "%'");
+            while (resultSet.next()) {
+                activities.add(new Activity(resultSet.getInt(1), resultSet.getInt(2), resultSet.getString(3), resultSet.getString(4)));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return activities;
+    }
 }
