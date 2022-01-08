@@ -34,8 +34,7 @@ public class MemberDAO {
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("SELECT * FROM public.member");
             while (resultSet.next()) {
-                members.add(new Member(resultSet.getInt(1), resultSet.getInt(2), resultSet.getBoolean(3), resultSet.getString(4),
-                        resultSet.getString(5), resultSet.getString(6), resultSet.getString(7), resultSet.getString(8), resultSet.getString(9)));
+                members.add(new Member(resultSet.getInt(1), resultSet.getInt(2), resultSet.getBoolean(3), resultSet.getString(4), resultSet.getString(5), resultSet.getString(6), resultSet.getString(7)));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -54,27 +53,7 @@ public class MemberDAO {
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("SELECT * FROM public.member WHERE id="+id);
             resultSet.next();
-            member = new Member(resultSet.getInt(1), resultSet.getInt(2), resultSet.getBoolean(3), resultSet.getString(4),
-                    resultSet.getString(5), resultSet.getString(6), resultSet.getString(7), resultSet.getString(8), resultSet.getString(9));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return member;
-    }
-
-    public static Member getMemberByLogin(String login) {
-
-        Member member = null;
-
-        Connection connection = getConnection();
-
-        try {
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM public.member WHERE login='"+login+"'");
-            resultSet.next();
-            member = new Member(resultSet.getInt(1), resultSet.getInt(2), resultSet.getBoolean(3), resultSet.getString(4),
-                    resultSet.getString(5), resultSet.getString(6), resultSet.getString(7), resultSet.getString(8), resultSet.getString(9));
+            member = new Member(resultSet.getInt(1), resultSet.getInt(2), resultSet.getBoolean(3), resultSet.getString(4), resultSet.getString(5), resultSet.getString(6), resultSet.getString(7));
         } catch (SQLException e) {
             e.printStackTrace();
         }
