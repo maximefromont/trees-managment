@@ -8,7 +8,7 @@ public class Association {
     private int id;
     private String name;
 
-    public Association(int id, String name, int recette, int depense){
+    public Association(int id, String name){
         this.id = id;
         this.name = name;
     }
