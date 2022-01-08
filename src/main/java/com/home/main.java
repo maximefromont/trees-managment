@@ -10,6 +10,7 @@ import com.cotisation.CotisationDAO;
 import com.member.*;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class main {
 
@@ -53,11 +54,21 @@ public class main {
         System.out.println("\n");
          */
 
+        System.out.print("Bienvenue, veuillez indiquer votre login : ");
+        Member member = MemberDAO.getMemberByLogin(new Scanner(System.in).nextLine());
+        System.out.print("Et votre mot de passe : ");
+        String password = new Scanner(System.in).nextLine();
+
+        if(password.equals(member.getMdp())) {
+            System.out.println("Bienvenue "+member.getName()+" ! Lancement du programme.");
+            launchControl.menu(member);
+        } else {
+            System.out.println("L'identifiant ou le mot de passe est incorrect.");
+        }
+
         //Changer le numéro pour changer de membre
         //Dans les données de bases de la base, 1 = Maxime, 2 = Martin et 3 = Bastien
-        Member memberTest = MemberDAO.getMemberById(2);
-
-        launchControl.menu(memberTest);
+        //Member memberTest = MemberDAO.getMemberById(2);
 
     }
 
