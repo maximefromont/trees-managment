@@ -1,14 +1,33 @@
+DROP TABLE IF EXISTS public.finance;
 DROP TABLE IF EXISTS public.activity;
 DROP TABLE IF EXISTS public.cotisation;
+DROP TABLE IF EXISTS public.vote;
 DROP TABLE IF EXISTS public.member;
 DROP TABLE IF EXISTS public.association;
 
 CREATE TABLE IF NOT EXISTS public.association
 (
     id SERIAL PRIMARY KEY,
-    name varchar(250) NOT NULL,
-    recette integer NOT NULL,
-	depense integer NOT NULL
+    name varchar(250) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS public.finance
+(
+	id SERIAL PRIMARY KEY,
+	id_association integer NOT NULL,
+	recette integer NOT NULL,
+	depense integer NOT NULL,
+	date VARCHAR(250) NOT NULL,
+	FOREIGN KEY(id_association) REFERENCES association(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS public.activity
+(
+    id SERIAL PRIMARY KEY,
+    id_association integer NOT NULL,
+    name varchar(1000) NOT NULL,
+    date varchar(250) NOT NULL,
+    FOREIGN KEY(id_association) REFERENCES association(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS public.member
@@ -33,15 +52,6 @@ CREATE TABLE IF NOT EXISTS public.vote
 	FOREIGN KEY(id_member) REFERENCES member(id) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS public.activity
-(
-    id SERIAL PRIMARY KEY,
-    id_member integer NOT NULL,
-    name varchar(1000) NOT NULL,
-    date varchar(250) NOT NULL,
-    FOREIGN KEY(id_member) REFERENCES member(id)
-);
-
 CREATE TABLE IF NOT EXISTS public.cotisation
 (
     id SERIAL PRIMARY KEY,
@@ -53,18 +63,27 @@ CREATE TABLE IF NOT EXISTS public.cotisation
 );
 
 INSERT INTO association VALUES
-(DEFAULT, 'Assos 1', 0, 0),
-(DEFAULT, 'Assos 2', 0, 0);
+(DEFAULT, 'Assos 1'),
+(DEFAULT, 'Assos 2');
+
+INSERT INTO finance VALUES
+(DEFAULT, 1, 310, 250, '2020'),
+(DEFAULT, 1, 0, 0, '2021');
+
+INSERT INTO activity VALUES
+(DEFAULT, 1, 'A codé en java', '21/12/2021'),
+(DEFAULT, 1, 'A codé en c++', '30/09/2021'),
+(DEFAULT, 1, 'A codé en python', '05/09/2001');
 
 INSERT INTO member VALUES
 (DEFAULT, 1, true, 'max', 'mdp', 'Maxime', '30/04/2001', '9 rue Marcel Pagnol, Avrillé, 49240', '3/12/2021'),
 (DEFAULT, 2, true, 'martin', 'mdp', 'Martin', 'mdr je sais pas', 'Quelque part à massy', '5/12/2021'),
 (DEFAULT, 1, false, 'bastien', 'mdp', 'Bastien', 'Bon', 'Dans une grotte', '10/12/2021');
 
-INSERT INTO activity VALUES
-(DEFAULT, 1, 'A codé en java', '21/12/2021'),
-(DEFAULT, 2, 'A codé en c++', '30/09/2021'),
-(DEFAULT, 3, 'A codé en python', '05/09/2001');
+INSERT INTO vote VALUES
+(DEFAULT, 1, 2033334),
+(DEFAULT, 2, 273256),
+(DEFAULT, 3, 231548);
 
 INSERT INTO cotisation VALUES
 (DEFAULT, 1, 15, '21/12/2021', true),
@@ -72,6 +91,8 @@ INSERT INTO cotisation VALUES
 (DEFAULT, 3, 20, '21/12/2021', false);
 
 --SELECT * FROM association;
-SELECT * FROM member;
+SELECT * FROM finance;
 --SELECT * FROM activity;
+--SELECT * FROM member;
+--SELECT * FROM vote;
 --SELECT * FROM cotisation;
