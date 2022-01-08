@@ -33,7 +33,7 @@ public class FinanceDAO {
 
         try {
             Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM public.finance WHERE id_association="+association.getId()+" AND date="+year);
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM public.finance WHERE id_association="+association.getId()+" AND date='"+year+"';");
             resultSet.next();
             finance = new Finance(resultSet.getInt(1), resultSet.getInt(2), resultSet.getInt(3), resultSet.getInt(4), resultSet.getString(5));
         } catch (SQLException e) {
