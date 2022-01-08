@@ -37,7 +37,7 @@ public class launchControl {
         //Affichage association
         System.out.println("\n" + associationMember.toString());
 
-        System.out.println("\n" + "Menu : " + "\n" +
+        System.out.print("\n" + "Menu : " + "\n" +
                 "1: Payer sa cotisation" + "\n" +
                 "2: RGPD" + "\n" +
                 "3: Rapport d'activité \n" +
