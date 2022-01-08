@@ -16,7 +16,7 @@ public class Donor {
         //enregistrer sur la bdd doneur
     }
     public void donner(String name,int don){
-        a.newrecette(don);
+        //a.newrecette(don);
        /* String fileName = name+"_donation.txt";
         String encoding = "UTF-8";
         try{
