@@ -8,6 +8,10 @@ import java.util.ArrayList;
 
 public class FinanceDAO {
 
+    /**
+     * @auth Maxime
+     * @return Connection à la bhase de donnée
+     */
     private static Connection getConnection() {
 
         Connection connection = null;
@@ -25,6 +29,12 @@ public class FinanceDAO {
         return connection;
     }
 
+    /**
+     * @auth Maxime
+     * @param association
+     * @param year
+     * @return Recupère le bilan de financier de l'année
+     */
     public static Finance getFinanceForYear(Association association, String year) {
 
         Finance finance = null;

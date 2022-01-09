@@ -33,6 +33,10 @@ public class Cotisation {
                 "date=" + getDate();
     }
 
+    /**
+     * @auth Maxime
+     * @return Information de la cotisation
+     */
     public String getInfo() {
         return "Numéro n°"+getId()+" : " + "\n" +
                 "Nom : " + MemberDAO.getMemberById(getId_member()).getName() + '\n' +

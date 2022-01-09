@@ -11,6 +11,10 @@ import com.member.Member;
 
 public class ActivityDAO {
 
+    /**
+     * @auth Maxime
+     * @return Connection à la base de donnée
+     */
     private static Connection getConnection() {
 
         Connection connection = null;
@@ -28,6 +32,10 @@ public class ActivityDAO {
         return connection;
     }
 
+    /**
+     * @auth Maxime
+     * @return outes les activitées de l'année de l'association
+     */
     public static ArrayList<Activity> getAllActivities() {
 
         ArrayList<Activity> activities = new ArrayList<Activity>();
@@ -72,6 +80,12 @@ public class ActivityDAO {
         return activities;
     }
 
+    /**
+     * @auth Maxime
+     * @param association
+     * @param name nom de l'activité
+     * Insère dans une base de donnée une activité lié à une association
+     */
     public static void createNewActivity(Association association, String name) {
 
         Connection connection = getConnection();

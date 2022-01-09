@@ -57,6 +57,10 @@ public class main {
 
     }
 
+    /**
+     * @auth Maxime
+     * @return nouveau membre
+     */
     private static Member register() {
         Association association = AssociationDAO.getAssociationById(1); //Association 1 en dur
         boolean type = false;
@@ -133,6 +137,10 @@ public class main {
 
     }
 
+    /**
+     * @auth Maxime
+     * @return membre qui c'est connecté
+     */
     private static Member login() {
         System.out.print("\n" + "Bienvenue, veuillez indiquer votre login : ");
         Member member = MemberDAO.getMemberByLogin(new Scanner(System.in).next());

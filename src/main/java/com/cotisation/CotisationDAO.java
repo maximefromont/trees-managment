@@ -11,6 +11,10 @@ import com.member.Member;
 
 public class CotisationDAO {
 
+    /**
+     * @auth Maxime
+     * @return Connecte à la base de donnée
+     */
     private static Connection getConnection() {
 
         Connection connection = null;
@@ -28,6 +32,10 @@ public class CotisationDAO {
         return connection;
     }
 
+    /**
+     * @auth Maxime
+     * @return Toutes les cotisations
+     */
     public static ArrayList<Cotisation> getAllCotisation() {
 
         ArrayList<Cotisation> cotisations = new ArrayList<Cotisation>();
@@ -47,6 +55,11 @@ public class CotisationDAO {
         return cotisations;
     }
 
+    /**
+     * @auth Maxime
+     * @param association
+     * @return Recupere toutes les cotisations d'una ssociation
+     */
     public static ArrayList<Cotisation> getAllCotisationForAssociation(Association association) {
 
         ArrayList<Cotisation> cotisations = new ArrayList<Cotisation>();
@@ -66,6 +79,11 @@ public class CotisationDAO {
         return cotisations;
     }
 
+    /**
+     * @auth Maxime
+     * @param id
+     * @return Recupère une cotisation en fonction de son is
+     */
     public static Cotisation getCotisationById(int id) {
 
         Cotisation cotisation = null;
@@ -84,6 +102,11 @@ public class CotisationDAO {
         return cotisation;
     }
 
+    /**
+     * @auth Maxime
+     * @param member
+     * @return Recupèrer toutes les d'un membre
+     */
     public static ArrayList<Cotisation> getAllCotisationForMember(Member member) {
 
         ArrayList<Cotisation> cotisations = new ArrayList<Cotisation>();
@@ -102,7 +125,11 @@ public class CotisationDAO {
 
         return cotisations;
     }
-
+    
+    /**
+     * @auth Maxime
+     * @return recupère la dernière cotisation
+     */
     public static Cotisation getLastCotisation() {
 
         Cotisation cotisation = null;
@@ -121,6 +148,12 @@ public class CotisationDAO {
         return cotisation;
     }
 
+    /**
+     * @auth Maxime
+     * @param member
+     * @param date
+     * @return Recupère toutes les cotisation d'un membre en fonction d'une date
+     */
     public static Cotisation getCotisationForMemberByDate(Member member, String date) {
 
         Cotisation cotisation = null;
@@ -139,6 +172,12 @@ public class CotisationDAO {
         return cotisation;
     }
 
+    /**
+     * @auth Maxime
+     * @param member
+     * @param prix
+     * Créé une nouvelle cotisation dans la base de donnnée
+     */
     public static void createNewCotisation(Member member, int prix) {
 
         Connection connection = getConnection();
