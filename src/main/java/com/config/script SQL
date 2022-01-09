@@ -2,7 +2,8 @@ DROP TABLE IF EXISTS public.finance;
 DROP TABLE IF EXISTS public.activity;
 DROP TABLE IF EXISTS public.cotisation;
 DROP TABLE IF EXISTS public.vote;
-DROP TABLE IF EXISTS public.member CASCADE;
+DROP TABLE IF EXISTS public.visite;
+DROP TABLE IF EXISTS public.member;
 DROP TABLE IF EXISTS public.association;
 
 CREATE TABLE IF NOT EXISTS public.association
