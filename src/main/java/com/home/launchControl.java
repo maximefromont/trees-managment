@@ -19,9 +19,6 @@ import com.tree.Tree;
 import com.vote.Vote;
 import com.vote.VoteDAO;
 
-import javax.mail.*;
-import javax.mail.internet.*;
-
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -83,37 +80,10 @@ public class launchControl {
                         checkMemberCotisation();
                         break;
                     case 12:
-                        List<Member> donor = getAllMemberThatAreDonor();
-                        String message = null;
-                        activityReportForYear("2022");
-                        activityReportForYear("2021");
-                        try {
-                            message = "Bonjour,\nAfin de préserver les différents arbres qui font la beauté de Paris nous faisons appel à vous dans le but d'obtenir des donnations afin de pouvoir continuer à préserver ces arbre" +
-                                    "\n Voici nos rapports d'activité ainsi que la syntyhese de l'exercice précédent : \n\n\n"+
-                                    Files.readString(Path.of("activity_report_for_year_2022.txt"))+"\n________________________________________________________\n"+
-                                    Files.readString(Path.of("activity_report_for_year_2021.txt"));
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        for(int i=0; i<donor.size();i++) {
-                            SendMail.main("Donnation", message, donor.get(i).getLogin());
-                        }
+                        askForDonation();
                         break;
                     case 13:
-                        System.out.println("Donner l'adresse email du contact pour demander une subvention");
-                        Scanner mail = new Scanner(System.in);
-                        activityReportForYear("2022");
-                        activityReportForYear("2021");
-                        String messagesub=null;
-                        try {
-                             messagesub = "Bonjour,\nAfin de préserver les différents arbres qui font la beauté de Paris nous faisons appel à vous dans le but d'avoir un subvention afin de pouvoir continuer à préserver ces arbre" +
-                                    "\n Voici nos rapports d'activité ainsi que la syntyhese de l'exercice précédent : \n\n\n"+
-                                    Files.readString(Path.of("activity_report_for_year_2022.txt"))+"\n________________________________________________________\n"+
-                                    Files.readString(Path.of("activity_report_for_year_2021.txt"));
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        SendMail.main("Demande de subvention",messagesub,"projetjavamail@yopmail.com");
+                        askForSubvention();
                         break;
                 }
             }
@@ -149,14 +119,53 @@ public class launchControl {
         System.exit(0);
     }
 
+    private static void askForSubvention() {
+        System.out.print("Veuillez renseigner l'adresse email du contact auquel demander une subvention : ");
+        String mailTo = new Scanner(System.in).next();
+
+        String message = initAskFor();
+
+        SendMail.main(("Demande de subvention pour "+associationMember.getName()), message, mailTo);
+    }
+
+    private static void askForDonation() {
+        String message = initAskFor();
+
+        List<Member> donors = getAllMemberThatAreDonor();
+        for(int i=0; i<donors.size();i++) {
+            SendMail.main(("Demande de donnation pour "+associationMember.getName()), message, donors.get(i).getLogin());
+        }
+    }
+
+    private static String initAskFor() {
+        //Génaration des rapports d'activitées des deux dernières années
+        activityReportForYear("2022");
+        activityReportForYear("2021");
+
+        String message = "";
+        try {
+            message = "Bonjour madame, monsieur.\n" +
+                    "Afin de préserver tous les arbres qui font la beauté de Paris, nous faisons appel à vous dans l'objectif d'obtenir une subvention.\n" +
+                    "Voici nos rapports d'activités des deux dernières années contenant chacun une synthèse : \n\n\n"+
+                    Files.readString(Path.of("activity_report_for_year_2022.txt"))+"\n________________________________________________________\n"+
+                    Files.readString(Path.of("activity_report_for_year_2021.txt"));
+        } catch (IOException e) {
+            System.out.println("\nErreur, un problème est survenue lors de la génération du mail.");
+            e.printStackTrace();
+        }
+
+        return message;
+    }
 
     private static void payCotisation() {
 
         if(currentMember.isMember()) {
+
             if(CotisationDAO.getCotisationForMemberByDate(currentMember, DateTimeFormatter.ofPattern("dd/MM/yyyy").format(LocalDateTime.now())) == null) {
+
                 String answer = "";
                 while(!answer.equals("Y") && !answer.equals("N")) {
-                    System.out.println("Voulez vous payer votre cotisation de 30 euros (Y/N) : ");
+                    System.out.print("Voulez vous payer votre cotisation de 30 euros (Y/N) : ");
                     answer = new Scanner(System.in).next();
                     if(!answer.equals("Y") && !answer.equals("N")) {
                         System.out.println("Veuillez faire attention à répondre par oui (Y) ou par non (N).");
@@ -166,45 +175,42 @@ public class launchControl {
                 if(answer.equals("Y")) {
                     CotisationDAO.createNewCotisation(currentMember, 30);
                     System.out.println("\n" + "Voici le résumé de votre cotisation : " + "\n");
+                    System.out.println(CotisationDAO.getLastMCotisation().getInfo());
                 }
                 if(answer.equals("N")) {
                     return;
                 }
-            } else {
-                System.out.println("Vous avez déjà réglè votre cotisation cette année.");
-            }
+
+            } else { System.out.println("Vous avez déjà réglè votre cotisation cette année."); }
 
         } else {
 
             int montant = -1;
-
             while (montant <= 0) {
                 try{
-                    System.out.print("\n" + "Veuillez indiquer le montant de votre donation : ");
+                    System.out.print("\n" + "Veuillez renseigner le montant de votre donation : ");
                     montant = new Scanner(System.in).nextInt();
                 } catch (InputMismatchException e) {
                     System.out.println("Erreur, vous devez rentrer un nombre entier.");
                 }
-
                 if(montant <= 0) {
                     System.out.println("Veuillez faire attention à ce que le montant renseigné soit supérieur à 0.");
                 }
             }
+
             CotisationDAO.createNewCotisation(currentMember, montant);
-            System.out.println("\n" + "Voici le résumé de votre cotisation : " + "\n");
+            System.out.println("\n" + "Voici le résumé de votre donation : " + "\n");
+            System.out.println(CotisationDAO.getLastMCotisation().getInfo());
         }
 
-        Cotisation cotisation = CotisationDAO.getLastMCotisation();
-
-        AssociationDAO.updateRecette(associationMember); //Update de la recette de l'association du membre
-        associationMember = AssociationDAO.getAssociationByMember(currentMember); //Update de la variable static associationMember
-
-        System.out.println("\n" + associationMember.toString());
+        //Update de la recette de l'association (et de sa variable statique)
+        AssociationDAO.updateRecette(associationMember);
+        associationMember = AssociationDAO.getAssociationByMember(currentMember);
     }
 
     /** displayRGPD
      * @auth Martin & Maxime
-     * Créé un fichier avec les information de al personne
+     * Crée un fichier contenant les informations de la personne
      */
     private static void displayRGPD() {
         String fileName = currentMember.getName()+"_"+ currentMember.getId()+"_data.txt";
@@ -222,14 +228,14 @@ public class launchControl {
             System.out.println("Un fichier de format txt à été imprimé dans java project.");
         }
         catch (IOException e){
-            System.out.println("Une erreur durant l'impression du fichier RGPD à eu lieu.");
             e.printStackTrace();
+            System.out.println("Une erreur durant l'impression du fichier RGPD à eu lieu.");
         }
     }
 
 
     /**
-     * Ecrit dans un fichier le rapport d'activité pour une année
+     * Crée un fichier contenant le rapport d'activité de l'association pour une année
      * @auth Bastien
      * @param year
      */

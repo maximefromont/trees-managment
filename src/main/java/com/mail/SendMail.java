@@ -47,10 +47,11 @@ public class SendMail {
 
             Transport.send(message);
 
-            System.out.println("la mail a bien envoyé");
+            System.out.println("Un email vient d'être envoyé avec succès.");
 
         } catch (MessagingException e) {
             e.printStackTrace();
+            System.out.println("Erreur lors de l'envoie du mail.");
         }
     }
 

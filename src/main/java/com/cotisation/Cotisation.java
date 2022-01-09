@@ -1,5 +1,7 @@
 package com.cotisation;
 
+import com.member.MemberDAO;
+
 public class Cotisation {
 
     private int id;
@@ -29,5 +31,12 @@ public class Cotisation {
                 "id_member=" + getId_member() + '\n' +
                 "prix=" + getPrix() + '\n' +
                 "date=" + getDate();
+    }
+
+    public String getInfo() {
+        return "Numéro n°"+getId()+" : " + "\n" +
+                "Nom : " + MemberDAO.getMemberById(getId_member()).getName() + '\n' +
+                "Prix : " + getPrix() + '\n' +
+                "Date : " + getDate();
     }
 }
