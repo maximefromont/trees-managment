@@ -1,5 +1,6 @@
 package com.member;
 
+import com.association.AssociationDAO;
 import com.cotisation.CotisationDAO;
 
 import java.time.LocalDateTime;
@@ -63,9 +64,9 @@ public class Member {
 
     public String getType() {
         if(type)
-            return "membre";
+            return "Membre";
         else
-            return "doneur";
+            return "Doneur";
     }
 
     //A reecrire en dehors de membre
@@ -85,5 +86,15 @@ public class Member {
                 "birth=" + getBirth() + '\n' +
                 "adress=" + getAdress() + '\n' +
                 "registrationDate=" + getRegistrationDate();
+    }
+
+    public String getInfo() {
+        return getType() + " n°" + getId() +" : " + "\n" +
+                "Association : " + AssociationDAO.getAssociationById(getId_association()).getName() + '\n' +
+                "Login : " + getLogin() + "\n" +
+                "Nom : " + getName() + '\n' +
+                "Date de naiscance : " + getBirth() + '\n' +
+                "Adresse : " + getAdress() + '\n' +
+                "Date d'inscription : " + getRegistrationDate();
     }
 }

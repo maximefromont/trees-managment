@@ -152,33 +152,40 @@ public class launchControl {
      */
     private static String initAskFor(String type) {
         //Génaration des rapports d'activitées des deux dernières années
-        activityReportForYear("2022");
-        activityReportForYear("2021");
+        String year = DateTimeFormatter.ofPattern("yyyy").format(LocalDateTime.now());
+        String lastYear = Integer.toString(Integer.parseInt(year)-1);
+        activityReportForYear(year);
+        activityReportForYear(lastYear);
 
         String message = "";
         try {
             message = "Bonjour madame, monsieur.\n" +
                     "Afin de préserver tous les arbres qui font la beauté de Paris, nous faisons appel à vous dans l'objectif d'obtenir une "+type+".\n" +
                     "Voici nos rapports d'activités des deux dernières années contenant chacun une synthèse : \n\n\n"+
-                    Files.readString(Path.of("activity_report_for_year_2022.txt"))+"\n________________________________________________________\n"+
-                    Files.readString(Path.of("activity_report_for_year_2021.txt"));
+                    Files.readString(Path.of(associationMember.getName()+"_activity_report_for_year_" + year + ".txt"))+"\n________________________________________________________\n"+
+                    Files.readString(Path.of(associationMember.getName()+"_activity_report_for_year_" + lastYear + ".txt"));
         } catch (IOException e) {
-            System.out.println("\nErreur, un problème est survenue lors de la génération du mail.");
+            System.out.println("Erreur, un problème est survenue lors de la génération du mail.");
             e.printStackTrace();
         }
 
         return message;
     }
 
+    /** payCotisation
+     * @auth Martin & Maxime
+     * Demande à l'utlisateur de payer une cotisation ou une donation en fonction de son type
+     */
     private static void payCotisation() {
 
         if(currentMember.isMember()) {
 
             if(CotisationDAO.getCotisationForMemberByDate(currentMember, DateTimeFormatter.ofPattern("dd/MM/yyyy").format(LocalDateTime.now())) == null) {
 
+                int montant = 30; //Montant en dur
                 String answer = "";
                 while(!answer.equals("Y") && !answer.equals("N")) {
-                    System.out.print("Voulez vous payer votre cotisation de 30 euros (Y/N) : ");
+                    System.out.print("Voulez vous payer votre cotisation de "+montant+" euros (Y/N) : ");
                     answer = new Scanner(System.in).next();
                     if(!answer.equals("Y") && !answer.equals("N")) {
                         System.out.println("Veuillez faire attention à répondre par oui (Y) ou par non (N).");
@@ -187,6 +194,7 @@ public class launchControl {
 
                 if(answer.equals("Y")) {
                     CotisationDAO.createNewCotisation(currentMember, 30);
+                    ActivityDAO.createNewActivity(associationMember, associationMember.getName()+" à reçu une cotisation de "+montant+" euros de la part de "+currentMember.getName()+".");
                     System.out.println("\n" + "Voici le résumé de votre cotisation : " + "\n");
                     System.out.println(CotisationDAO.getLastMCotisation().getInfo());
                 }
@@ -212,6 +220,7 @@ public class launchControl {
             }
 
             CotisationDAO.createNewCotisation(currentMember, montant);
+            ActivityDAO.createNewActivity(associationMember, associationMember.getName()+" à reçu une donation de "+montant+" de la part de "+currentMember.getName()+".");
             System.out.println("\n" + "Voici le résumé de votre donation : " + "\n");
             System.out.println(CotisationDAO.getLastMCotisation().getInfo());
         }
@@ -223,17 +232,18 @@ public class launchControl {
 
     /** displayRGPD
      * @auth Martin & Maxime
-     * Crée un fichier contenant les informations de la personne
+     * Crée un fichier contenant les informations de l'utilisateur
      */
     private static void displayRGPD() {
         String fileName = currentMember.getName()+"_"+ currentMember.getId()+"_data.txt";
         String encoding = "UTF-8";
+
         try{
             PrintWriter writer = new PrintWriter(fileName, encoding);
-            writer.println(currentMember.toString());
+            writer.println(currentMember.getInfo());
             writer.println("--------------------");
             for(Cotisation cotisation : CotisationDAO.getAllCotisationForMember(currentMember)) {
-                writer.println(cotisation.toString());
+                writer.println(cotisation.getInfo());
                 writer.println("\n");
             }
             writer.close();
@@ -253,10 +263,9 @@ public class launchControl {
      * @param year
      */
     private static void activityReportForYear(String year) {
-
         ArrayList<Activity> activities = ActivityDAO.getAllActivitiesByYear(year);
 
-        String fileName = "activity_report_for_year_" + year + ".txt";
+        String fileName = associationMember.getName()+"_activity_report_for_year_" + year + ".txt";
         String encoding = "UTF-8";
 
         try{
@@ -297,7 +306,6 @@ public class launchControl {
     }
 
     private static void deleteAccount() {
-
         String answer = "";
         while(!answer.equals("Y") && !answer.equals("N")) {
             System.out.print("\n" + "Êtes vous sur de vouloir supprimer votre compte (Y/N) : ");
@@ -311,7 +319,9 @@ public class launchControl {
             MemberDAO.deleteMember(currentMember);
             exitProgram();
         }
-
+        if (answer.equals("N")) {
+            return;
+        }
     }
 
     /**
