@@ -18,6 +18,8 @@ import com.tree.Tree;
 import com.vote.VoteDAO;
 
 import java.io.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class launchControl {
@@ -104,26 +106,49 @@ public class launchControl {
 
     private static void payCotisation() {
 
-        int montant = -1;
+        if(member.isMember()) {
+            if(CotisationDAO.getCotisationForMemberByDate(member, DateTimeFormatter.ofPattern("dd/MM/yyyy").format(LocalDateTime.now())) == null) {
+                String answer = "";
+                while(!answer.equals("Y") && !answer.equals("N")) {
+                    System.out.println("Voulez vous payer votre cotisation de 30 euros (Y/N) : ");
+                    answer = new Scanner(System.in).next();
+                    if(!answer.equals("Y") && !answer.equals("N")) {
+                        System.out.println("Veuillez faire attention à répondre par oui (Y) ou par non (N).");
+                    }
+                }
 
-        while (montant <= 0) {
-            try{
-                System.out.print("\n" + "Veuillez indiquer le montant de votre cotisation : ");
-                montant = new Scanner(System.in).nextInt();
-            } catch (InputMismatchException e) {
-                System.out.println("Erreur, vous devez rentrer un nombre entier.");
+                if(answer.equals("Y")) {
+                    CotisationDAO.createNewCotisation(member, 30);
+                    System.out.println("\n" + "Voici le résumé de votre cotisation : " + "\n");
+                }
+                if(answer.equals("N")) {
+                    return;
+                }
+            } else {
+                System.out.println("Vous avez déjà réglè votre cotisation cette année.");
             }
 
-            if(montant <= 0) {
-                System.out.println("Veuillez faire attention à ce que le montant renseigné soit supérieur à 0.");
+        } else {
+
+            int montant = -1;
+
+            while (montant <= 0) {
+                try{
+                    System.out.print("\n" + "Veuillez indiquer le montant de votre donation : ");
+                    montant = new Scanner(System.in).nextInt();
+                } catch (InputMismatchException e) {
+                    System.out.println("Erreur, vous devez rentrer un nombre entier.");
+                }
+
+                if(montant <= 0) {
+                    System.out.println("Veuillez faire attention à ce que le montant renseigné soit supérieur à 0.");
+                }
             }
+            CotisationDAO.createNewCotisation(member, montant);
+            System.out.println("\n" + "Voici le résumé de votre cotisation : " + "\n");
         }
 
-        CotisationDAO.createNewCotisation(member, montant, true);
-
-        System.out.println("\n" + "Voici le résumé de votre cotisation : " + "\n");
-        ArrayList<Cotisation> cotisations = CotisationDAO.getAllCotisationForMember(member);
-        System.out.println(cotisations.get(cotisations.size() - 1).toString()); //Dernière cotisation pour ce membre
+        Cotisation cotisation = CotisationDAO.getLastMCotisation();
 
         AssociationDAO.updateRecette(associationMember); //Update de la recette de l'association du membre
         associationMember = AssociationDAO.getAssociationByMember(member); //Update de la variable static associationMember

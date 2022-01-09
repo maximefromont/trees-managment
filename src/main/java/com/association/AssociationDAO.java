@@ -1,6 +1,8 @@
 package com.association;
 
 import java.sql.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import com.config.*;
@@ -87,7 +89,7 @@ public class AssociationDAO {
         Connection connection = getConnection();
 
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE public.association SET recette=? WHERE id=?;");
+            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE public.finance SET recette=? WHERE id_association=? and date='"+ DateTimeFormatter.ofPattern("yyyy").format(LocalDateTime.now())+"';");
 
             int sommeCotisations = 0;
             for(Cotisation cotisation : CotisationDAO.getAllCotisationForAssociation(association)) {
