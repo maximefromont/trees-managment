@@ -5,9 +5,12 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.util.Properties;
 
+/**
+ * @author Martin
+ */
 public class SendMail {
 
-    public static void main() {
+    public static void main(String title, String txt, String to) {
 
         final String username = "projetassociationapp3@gmail.com";
         final String password = "ProjetAPP3!";
@@ -32,15 +35,14 @@ public class SendMail {
             message.setFrom(new InternetAddress("projetassociationapp3@gmail.com"));
             message.setRecipients(
                     Message.RecipientType.TO,
-                    InternetAddress.parse("projetjavamail@yopmail.com")
+                    InternetAddress.parse(to)
             );
-            message.setSubject("Testing Gmail SSL");
-            message.setText("Dear Mail Crawler,"
-                    + "\n\n Please do not spam my email!");
+            message.setSubject(title);
+            message.setText(txt);
 
             Transport.send(message);
 
-            System.out.println("Done");
+            System.out.println("la mail a bien envoyé");
 
         } catch (MessagingException e) {
             e.printStackTrace();

@@ -2,6 +2,9 @@ package com.tree;
 
 import com.opencsv.bean.CsvBindByPosition;
 
+/**
+ * @author Martin
+ */
 public class Tree {
 
     @CsvBindByPosition(position = 0)
@@ -48,20 +51,6 @@ public class Tree {
                 "cm - Hauteur : " + height +
                 "m - Quartier : " + location + " | "
                 ;
-    }
-
-    @Override
-    public String toString() {
-        return "Tree{" +
-                "id='" + id + '\'' +
-                ", cir='" + cir + '\'' +
-                ", height='" + height + '\'' +
-                ", location='" + location + '\'' +
-                ", name='" + name + '\'' +
-                ", type='" + type + '\'' +
-                ", speicies='" + speicies + '\'' +
-                ", remarquable='" + remarquable + '\'' +
-                '}';
     }
 
     public String getLocation() {

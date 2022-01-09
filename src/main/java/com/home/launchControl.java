@@ -23,6 +23,8 @@ import javax.mail.*;
 import javax.mail.internet.*;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -42,7 +44,6 @@ public class launchControl {
 
         boolean programLife = true;
         while(programLife) {
-            SendMail.main();
             if (currentMember.isMember()) {
 
                 System.out.print("\n" + "Menu (membre) : " + "\n" +
@@ -81,10 +82,23 @@ public class launchControl {
                         checkMemberCotisation();
                         break;
                     case 12:
-
+                        SendMail.main("Donnation","","");
                         break;
                     case 13:
-
+                        System.out.println("Donner l'adresse email du contact pour demander une subvention");
+                        Scanner mail = new Scanner(System.in);
+                        activityReportForYear("2022");
+                        activityReportForYear("2021");
+                        String message = null;
+                        try {
+                            message = "Bonjour,\nAfin de préserver les différents arbres qui font la beauté de Paris nous faisons appel à vous dans le but d'avoir un subvention afin de pouvoir continuer à préserver ces arbre" +
+                                    "\n Voici nos rapports d'activité ainsi que la syntyhese de l'exercice précédent : \n\n\n"+
+                                    Files.readString(Path.of("activity_report_for_year_2022.txt"))+"\n________________________________________________________\n"+
+                                    Files.readString(Path.of("activity_report_for_year_2021.txt"));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        SendMail.main("Demande de subvention",message,"projetjavamail@yopmail.com");
                         break;
                 }
             }
