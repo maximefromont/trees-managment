@@ -10,6 +10,11 @@ import java.util.ArrayList;
 
 public class VoteDAO {
 
+    /**Connection
+     * @auth Maxime
+     * Connecte à la base de données
+     * @return
+     */
     private static Connection getConnection() {
 
         Connection connection = null;
@@ -27,6 +32,10 @@ public class VoteDAO {
         return connection;
     }
 
+    /**getAllVote
+     * @auth Maxime
+     * @return List de tous les votes
+     */
     public static ArrayList<Vote> getAllVote() {
 
         ArrayList<Vote> votes = new ArrayList<Vote>();
@@ -46,6 +55,11 @@ public class VoteDAO {
         return votes;
     }
 
+    /**
+     * @auth
+     * @param member
+     * @return Tous les votes d'un membre
+     */
     public static ArrayList<Vote> getAllVoteForMember(Member member) {
 
         ArrayList<Vote> votes = new ArrayList<Vote>();
@@ -65,6 +79,12 @@ public class VoteDAO {
         return votes;
     }
 
+    /**
+     * @auth Maxime
+     * @param member
+     * @param id_arbre
+     * Insere dans la base de données
+     */
     public static void createNewVote(Member member, int id_arbre) {
 
         Connection connection = getConnection();

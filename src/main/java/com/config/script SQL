@@ -98,11 +98,11 @@ INSERT INTO vote VALUES
 (DEFAULT, 2, 171884);
 
 INSERT INTO cotisation VALUES
-(DEFAULT, 1, 30, '21/12/2021'),
+(DEFAULT, 1, 30, '21/12/2021');
 
 INSERT INTO activity VALUES
 (DEFAULT,1,'Protection des arbres du Grand Paris à reçu une donation de 100 de la part de Martin.','01/01/2022'),
-(DEFAULT,1,'Protection des arbres du Grand Paris à reçu une cotisation de 30 euros de la part de Maxime.'.'09/01/2021');
+(DEFAULT,1,'Protection des arbres du Grand Paris à reçu une cotisation de 30 euros de la part de Maxime.','09/01/2021');
 
 --SELECT * FROM association;
 SELECT * FROM finance;

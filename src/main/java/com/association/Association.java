@@ -24,21 +24,4 @@ public class Association {
                 "name=" + getName();
     }
 
-    /*
-    public void defraiement(int cout,Member... a){}
-    public void factures(int fac) throws BalanceException {
-        if(getBudget()-(depense+fac)<0){
-            throw new BalanceException("Solde insufisant");
-        }
-        else {
-            depense += fac;
-            updateAssos();
-        }
-    }
-
-
-    public void newrecette(int add){
-        recette+=add;
-    }
-     */
 }

@@ -127,6 +127,9 @@ public class launchControl {
         exitProgram();
     }
 
+    /**@auth Maxime
+     * Stoppe le programme
+     */
     public static void exitProgram() {
         System.out.println("\n" + "Merci d'avoir utilisé le programme. Au revoir !");
         System.exit(0);
