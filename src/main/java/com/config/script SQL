@@ -62,14 +62,11 @@ CREATE TABLE IF NOT EXISTS public.cotisation
 );
 
 INSERT INTO association VALUES
-(DEFAULT, 'Assos 1'),
-(DEFAULT, 'Assos 2');
+(DEFAULT, 'Protection des arbres du Grand Paris');
 
 INSERT INTO finance VALUES
-(DEFAULT, 1, 310, 250, '2020'),
-(DEFAULT, 1, 0, 0, '2021'),
-(DEFAULT, 2, 120, 50, '2020'),
-(DEFAULT, 2, 0, 0, '2021');
+(DEFAULT, 1, 15000, 13000, '2021'),
+(DEFAULT, 1, 0, 0, '2022'),
 
 INSERT INTO activity VALUES
 (DEFAULT, 1, 'A codé en java', '21/12/2021'),
