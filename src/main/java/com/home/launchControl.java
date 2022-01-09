@@ -181,7 +181,11 @@ public class launchControl {
     }
 
 
-
+    /**
+     * Ecrit dans un fichier le rapport d'activité pour une année
+     * @auth Bastien
+     * @param year
+     */
     private static void activityReportForYear(String year) {
 
         ArrayList<Activity> activities = ActivityDAO.getAllActivitiesByYear(year);
@@ -244,6 +248,9 @@ public class launchControl {
 
     }
 
+    /**
+     * Fonction menu pour obtenir un rapport d'activité
+     */
     private static void getActivityReport() {
         int year = 0;
         boolean condition = false;

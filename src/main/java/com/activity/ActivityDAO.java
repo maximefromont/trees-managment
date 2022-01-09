@@ -47,6 +47,12 @@ public class ActivityDAO {
         return activities;
     }
 
+    /**
+     * Renvoie la liste des activités pour une année
+     * @auth Bastien
+     * @param year, l'année en question
+     * @return ArrayList<Activity> activities, une liste d'Activity
+     */
     public static ArrayList<Activity> getAllActivitiesByYear(String year) {
 
         ArrayList<Activity> activities = new ArrayList<Activity>();

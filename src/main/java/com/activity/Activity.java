@@ -33,6 +33,11 @@ public class Activity {
                 "date=" + getDate();
     }
 
+    /**
+     * Retourne les informations utiles à un utilisateur concernant une activité
+     * @auth Bastien
+     * @return String
+     */
     public String info() {
         return "A la date : " + getDate() + "\n" +
                 "Le membre " + MemberDAO.getMemberById(getId_member()).getName() + "\n" +
