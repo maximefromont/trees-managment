@@ -15,6 +15,7 @@ import com.member.MemberDAO;
 import com.opencsv.bean.CsvToBeanBuilder;
 
 import com.tree.Tree;
+import com.vote.VoteDAO;
 
 import java.io.*;
 import java.util.*;
@@ -54,7 +55,11 @@ public class launchControl {
                         displayRGPD();
                         break;
                     case 3:
-                        treesCSV();
+                        try {
+                            vote();
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
                         break;
                     case 4:
                         deleteAccount();
@@ -234,21 +239,22 @@ public class launchControl {
     }
 
 
-    private static void treesCSV() {
-
+    private static List<Tree> treesCSV() {
+        List<Tree>retour = new ArrayList<>();
         try {
             List<Tree> arbre = new CsvToBeanBuilder(new FileReader("src/main/resources/les-arbres.csv"))
                     .withType(Tree.class)
                     .withSeparator(';')
                     .build()
                     .parse();
-            System.out.println(arbre);
+            retour=arbre;
         } catch(IOException e) {
             System.out.println("Erreur, le fichier 'les-arbres.csv' n'a pas été trouvé.");
             e.printStackTrace();
         }
+        return retour;
     }
-    /*
+
     public static void printTree() throws FileNotFoundException {
         List<Tree> liste = treesCSV();
         for (int i = 0; i<liste.size();i++){
@@ -256,13 +262,77 @@ public class launchControl {
         }
     }
 
-    public static void orintTree(String lieu) throws FileNotFoundException {
+    public static void printTree(String lieu) throws FileNotFoundException {
         List<Tree> liste = treesCSV();
         for (int i = 0; i<liste.size();i++){
-            if(lieu==liste.get(i).getLocation()) {
+            if(Objects.equals(lieu, liste.get(i).getLocation())) {
                 System.out.println(liste.get(i).showMe());
             }
         }
-    }*/
+    }
+
+    public static void vote() throws FileNotFoundException {
+        System.out.println("Voulez vous  avoir la liste des arbres avant de voter (1) ou voter directement (2) ?\n");
+        Scanner s = new Scanner(System.in);
+        switch (s.nextInt()){
+            case 1:System.out.println("De quel arrondissement/département voulez vous voir les arbres ?\n" +
+                    "0 : Tous les arbres" +
+                    "1 : Paris, 1er arrondissement" +
+                    "2 : Paris, 2eme arrondissement" +
+                    "3 : Paris, 3eme arrondissement" +
+                    "4 : Paris, 4eme arrondissement" +
+                    "5 : Paris, 5eme arrondissement" +
+                    "6 : Paris, 6eme arrondissement" +
+                    "7 : Paris, 7eme arrondissement" +
+                    "8 : Paris, 8eme arrondissement" +
+                    "9 : Paris, 9eme arrondissement" +
+                    "10 : Paris, 10eme arrondissement" +
+                    "11 : Paris, 11eme arrondissement" +
+                    "12 : Paris, 12eme arrondissement" +
+                    "13 : Paris, 13eme arrondissement" +
+                    "14 : Paris, 14eme arrondissement" +
+                    "15 : Paris, 15eme arrondissement" +
+                    "16 : Paris, 16eme arrondissement" +
+                    "17 : Paris, 17eme arrondissement" +
+                    "18 : Paris, 18eme arrondissement" +
+                    "19 : Paris, 19eme arrondissement" +
+                    "20 : Paris, 20eme arrondissement" +
+                    "21 : Bois de Boulogne" +
+                    "22 : Bois de Vincennes" +
+                    "23 : Hauts-de-Seine" +
+                    "24 : Seine-Saint-Denis" +
+                    "25 : Val-de-Marne");
+                Scanner c = new Scanner(System.in);
+                int num=c.nextInt();
+                if(num==0){
+                    printTree();
+                }
+                else if (num<=20){
+                    printTree("PARIS "+num+"E ARRDT");
+                }
+                else{
+                    switch (num){
+                        case 21:printTree("BOIS DE BOULOGNE");break;
+                        case 22:printTree("BOIS DE VINCENNES");break;
+                        case 23:;printTree("HAUTS-DE-SEINE");break;
+                        case 24:;printTree("SEINE-SAINT-DENIS");break;
+                        case 25:;printTree("VAL-DE-MARNE");break;
+                    }
+                }
+            case 2: System.out.println("Veuillez rentrer les id des 5 arbres (l'ordre n'a pas d'importance)");
+                Scanner s1 = new Scanner(System.in);
+                VoteDAO.createNewVote(member,s1.nextInt());
+                Scanner s2 = new Scanner(System.in);
+                VoteDAO.createNewVote(member,s2.nextInt());
+                Scanner s3 = new Scanner(System.in);
+                VoteDAO.createNewVote(member,s3.nextInt());
+                Scanner s4 = new Scanner(System.in);
+                VoteDAO.createNewVote(member,s4.nextInt());
+                Scanner s5 = new Scanner(System.in);
+                VoteDAO.createNewVote(member,s5.nextInt());
+                break;
+        }
+
+    }
 
 }

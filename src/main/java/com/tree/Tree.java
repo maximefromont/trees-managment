@@ -41,12 +41,12 @@ public class Tree {
     }
 
     public String showMe() {
-        return "n°" + id + " - " + name + "/genre : " + type +
-                "/espece : " + speicies + " - " +
-                "circonférence (en cm) : " + cir +
+        return "n°" + id + " - " + name + " / Genre : " + type +
+                " / Espece : " + speicies + " - " +
+                "Circonférence : " + cir +
 
-                " - hauteur (en m) : " + height +
-                " - Quartier : " + location + " | "
+                "cm - Hauteur : " + height +
+                "m - Quartier : " + location + " | "
                 ;
     }
 
