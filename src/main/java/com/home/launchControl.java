@@ -8,6 +8,7 @@ import com.association.Finance;
 import com.association.FinanceDAO;
 import com.cotisation.Cotisation;
 import com.cotisation.CotisationDAO;
+import com.mail.SendMail;
 import com.member.Member;
 
 import com.member.MemberDAO;
@@ -17,6 +18,9 @@ import com.opencsv.bean.CsvToBeanBuilder;
 import com.tree.Tree;
 import com.vote.Vote;
 import com.vote.VoteDAO;
+
+import javax.mail.*;
+import javax.mail.internet.*;
 
 import java.io.*;
 import java.time.LocalDateTime;
@@ -38,7 +42,9 @@ public class launchControl {
 
         boolean programLife = true;
         while(programLife) {
+            SendMail.main();
             if (currentMember.isMember()) {
+
                 System.out.print("\n" + "Menu (membre) : " + "\n" +
                         "1 - Payer ma cotisation" + "\n" +
                         "2 - Extraire mes RGPD" + "\n" +
@@ -391,6 +397,52 @@ public class launchControl {
             System.out.println("Vous avez déjà voté");
         }
     }
+/*
+    public static void mail (String from, String pwd, String to, String sub, String msg){
+        Properties props = new Properties();
+        props.put("mail.smtp.user", from);
+        props.put("mail.smtp.host", "stmp.gmail.com");
+        props.put("mail.smtp.port", "465");
+        props.put("mail.smtp.starttls.enable","true");
+        props.put("mail.smtp.debug", "true");
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.socketFactory.port", "465");
+        props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+        props.put("mail.smtp.socketFactory.fallback", "false");
+
+        SMTPAuthenticator auth = new SMTPAuthenticator();
+        Session session = Session.getInstance(props, auth);
+        session.setDebug(true);
+
+        MimeMessage msg = new MimeMessage(session);
+        try {
+            msg.setSubject(sub);
+            msg.setFrom(new InternetAddress("projetassociationapp3@gmail.com"));
+            msg.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
+
+            Transport transport = session.getTransport("smtps");
+            transport.connect("stmp.gmail.com", Integer.valueOf("465"), "Martin-maxime-bastien", "ProjetAPP3!");
+            transport.sendMessage(msg, msg.getAllRecipients());
+            transport.close();
+
+        } catch (AddressException e) {
+            e.printStackTrace();
+            return false;
+        } catch (MessagingException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public static void sendMail(){
+        mail(
+                "projetassociationapp3@gmail.com",
+                "ProjetAPP3!",
+                "projetjavamail@yopmail.com",
+                "Faites des dons",
+                "Ceci marche, c'est incroyable"
+        );
+    }*/
 
     /**
      * Vérifie que chaque membre aie payé sa cotisation. Ils sont radiés sinon.
