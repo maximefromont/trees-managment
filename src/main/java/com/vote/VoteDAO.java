@@ -46,6 +46,25 @@ public class VoteDAO {
         return votes;
     }
 
+    public static ArrayList<Vote> getAllVoteForMember(Member member) {
+
+        ArrayList<Vote> votes = new ArrayList<Vote>();
+
+        Connection connection = getConnection();
+
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM public.vote WHERE member_id="+member.getId());
+            while (resultSet.next()) {
+                votes.add(new Vote(resultSet.getInt(1), resultSet.getInt(2), resultSet.getInt(3)));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return votes;
+    }
+
     public static void createNewVote(Member member, int id_arbre) {
 
         Connection connection = getConnection();
