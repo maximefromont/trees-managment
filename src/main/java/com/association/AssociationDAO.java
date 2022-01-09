@@ -104,4 +104,20 @@ public class AssociationDAO {
         }
 
     }
+
+    public static void updateDepense(Association association, int montant) {
+
+        Connection connection = getConnection();
+
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE public.finance SET depense=depense+? WHERE id_association=? and date='"+ DateTimeFormatter.ofPattern("yyyy").format(LocalDateTime.now())+"';");
+
+            preparedStatement.setInt(1, montant);
+            preparedStatement.setInt(2, association.getId());
+            preparedStatement.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
 }

@@ -61,6 +61,7 @@ public class launchControl {
                         "12 - Faire une demande de don" + "\n" +
                         "13 - Faire une demande de subvention" + "\n" +
                         "14 - Resultats des votes\n" +
+                        "15 - Payer une facture \n" +
                         "Votre choix : ");
                 Scanner s = new Scanner(System.in);
                 switch (s.nextInt()) {
@@ -93,6 +94,9 @@ public class launchControl {
                         break;
                     case 14:
                         resultVote();
+                        break;
+                    case 15:
+                        payBill();
                         break;
                 }
             }
@@ -573,6 +577,38 @@ public class launchControl {
             exitProgram();
         }
 
+    }
+
+    /**
+     * Paye une facture
+     * @auth Bastien
+     */
+    public static void payBill()
+    {
+        int montant = 0;
+        boolean condition = false;
+
+        while (!condition) {
+            try{
+                System.out.print("\n" + "Veuillez indiquer le montant de la facture : ");
+                montant = new Scanner(System.in).nextInt();
+            } catch (InputMismatchException e) {
+                System.out.println("Erreur, vous devez rentrer un montant valide.");
+            }
+
+            condition = true;
+            if(montant <= 0) {
+                System.out.println("Erreur, vous devez rentrer un montant valide.");
+                condition = false;
+            }
+        }
+        System.out.println("Entrez le motif de cette facture");
+        String motif = new Scanner(System.in).nextLine();
+
+        AssociationDAO.updateDepense(associationMember, montant);
+        ActivityDAO.createNewActivity(associationMember, associationMember.getName() + "a payé une facture de " + montant + " pour motif : +" + motif);
+        System.out.println("Vous avez payé une facture d'un montant de " + montant);
+        associationMember = AssociationDAO.getAssociationByMember(currentMember);
     }
 
 }
