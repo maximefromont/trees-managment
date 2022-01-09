@@ -47,7 +47,13 @@ public class main {
                 break;
         }
 
-        launchControl.menu(member, args[0]);
+        if(member == null) {
+            return;
+        } else if (args.length == 0) {
+            System.out.println("Erreur, veuillez renseigner le chemin vers le fichier les-arbres.csv en argument.");
+        } else {
+            launchControl.menu(member, args[0]);
+        }
 
     }
 

@@ -16,6 +16,8 @@ import com.member.MemberDAO;
 import com.opencsv.bean.CsvToBeanBuilder;
 
 import com.tree.Tree;
+import com.visite.Visite;
+import com.visite.VisiteDAO;
 import com.vote.Vote;
 import com.vote.VoteDAO;
 
@@ -54,6 +56,8 @@ public class launchControl {
                         "2 - Extraire mes RGPD" + "\n" +
                         "3 - Voter pour un arbre" + "\n" +
                         "4 - Supprimer mon compte membre" + "\n" +
+                        "5 - Enregistrer une visite d'arbre" + "\n" +
+                        "6 - Afficher toute les visites" + "\n" +
                         "0 - Quitter le programme" + "\n" +
                         "------ PARTIE TECHNIQUE (pour tester) ------" + "\n" +
                         "10 - Exraire le rapport d'activité \n" +
@@ -79,6 +83,12 @@ public class launchControl {
                         break;
                     case 4:
                         deleteAccount();
+                        break;
+                    case 5:
+                        planVisit();
+                        break;
+                    case 6:
+                        displayVisit();
                         break;
                     case 10:
                         getActivityReport();
@@ -133,6 +143,57 @@ public class launchControl {
     public static void exitProgram() {
         System.out.println("\n" + "Merci d'avoir utilisé le programme. Au revoir !");
         System.exit(0);
+    }
+
+    /**@auth Maxime
+     * Permet à l'utilisateur de planifier une visite vers un arbre, de se faire rembourser les frais et d'écrire son compte rendu
+     */
+    public static void planVisit() {
+
+        if(VisiteDAO.getAllVisitesForMember(currentMember).size() > 5 ) {
+            System.out.println("Désolé, Vous êtes limité à 5 visites par an.");
+            return;
+        }
+
+        int id_arbre = -1;
+        while(id_arbre <= 0) {
+            try{
+                System.out.print("\n" + "Veuillez renseigner le numéro de l'arbre visité (n'importe quelle numéro pour tester si besoin) : ");
+                id_arbre = new Scanner(System.in).nextInt();
+            } catch (InputMismatchException e) {
+                System.out.println("Erreur, vous devez rentrer un nombre entier.");
+            }
+            if(id_arbre <= 0) {
+                System.out.println("Veuillez faire attention à ce que votre choix soit supérieur à 0.");
+            }
+        }
+
+        int prix = 6; //Defraiement = 6 (en dur)
+
+        System.out.print("Veuillez écrire votre compte rendu au sujet de cette visite : ");
+        String compte_rendu = new Scanner(System.in).nextLine();
+
+        VisiteDAO.createNewVisite(currentMember, id_arbre, prix, compte_rendu);
+
+        //Actualisation des dépenses de l'association et de la variable statique association.
+        AssociationDAO.updateDepense(associationMember, prix);
+        associationMember = AssociationDAO.getAssociationByMember(currentMember);
+
+        System.out.println("\n" + "Voici le résumé de votre visite : ");
+        System.out.println(VisiteDAO.getLastVisite().getInfo());
+    }
+
+    /**@auth Maxime
+     * Affiche la liste de toute les visites de l'utilisateur
+     */
+    public static void displayVisit() {
+
+        System.out.println("");
+        for(Visite visite : VisiteDAO.getAllVisitesForMember(currentMember)) {
+            System.out.println(visite.getInfo());
+            System.out.println("--------------------");
+        }
+
     }
 
     /**
@@ -212,7 +273,7 @@ public class launchControl {
                     CotisationDAO.createNewCotisation(currentMember, 30);
                     ActivityDAO.createNewActivity(associationMember, associationMember.getName()+" à reçu une cotisation de "+montant+" euros de la part de "+currentMember.getName()+".");
                     System.out.println("\n" + "Voici le résumé de votre cotisation : " + "\n");
-                    System.out.println(CotisationDAO.getLastMCotisation().getInfo());
+                    System.out.println(CotisationDAO.getLastCotisation().getInfo());
                 }
                 if(answer.equals("N")) {
                     return;
@@ -238,7 +299,7 @@ public class launchControl {
             CotisationDAO.createNewCotisation(currentMember, montant);
             ActivityDAO.createNewActivity(associationMember, associationMember.getName()+" à reçu une donation de "+montant+" de la part de "+currentMember.getName()+".");
             System.out.println("\n" + "Voici le résumé de votre donation : " + "\n");
-            System.out.println(CotisationDAO.getLastMCotisation().getInfo());
+            System.out.println(CotisationDAO.getLastCotisation().getInfo());
         }
 
         //Update de la recette de l'association (et de sa variable statique)
@@ -424,31 +485,31 @@ public class launchControl {
             switch (s.nextInt()) {
                 case 1:
                     System.out.println("De quel arrondissement/département voulez vous voir les arbres ?\n" +
-                            "0 : Tous les arbres" +
-                            "1 : Paris, 1er arrondissement" +
-                            "2 : Paris, 2eme arrondissement" +
-                            "3 : Paris, 3eme arrondissement" +
-                            "4 : Paris, 4eme arrondissement" +
-                            "5 : Paris, 5eme arrondissement" +
-                            "6 : Paris, 6eme arrondissement" +
-                            "7 : Paris, 7eme arrondissement" +
-                            "8 : Paris, 8eme arrondissement" +
-                            "9 : Paris, 9eme arrondissement" +
-                            "10 : Paris, 10eme arrondissement" +
-                            "11 : Paris, 11eme arrondissement" +
-                            "12 : Paris, 12eme arrondissement" +
-                            "13 : Paris, 13eme arrondissement" +
-                            "14 : Paris, 14eme arrondissement" +
-                            "15 : Paris, 15eme arrondissement" +
-                            "16 : Paris, 16eme arrondissement" +
-                            "17 : Paris, 17eme arrondissement" +
-                            "18 : Paris, 18eme arrondissement" +
-                            "19 : Paris, 19eme arrondissement" +
-                            "20 : Paris, 20eme arrondissement" +
-                            "21 : Bois de Boulogne" +
-                            "22 : Bois de Vincennes" +
-                            "23 : Hauts-de-Seine" +
-                            "24 : Seine-Saint-Denis" +
+                            "0 : Tous les arbres" + "\n" +
+                            "1 : Paris, 1er arrondissement" + "\n" +
+                            "2 : Paris, 2eme arrondissement" + "\n" +
+                            "3 : Paris, 3eme arrondissement" + "\n" +
+                            "4 : Paris, 4eme arrondissement" + "\n" +
+                            "5 : Paris, 5eme arrondissement" + "\n" +
+                            "6 : Paris, 6eme arrondissement" + "\n" +
+                            "7 : Paris, 7eme arrondissement" + "\n" +
+                            "8 : Paris, 8eme arrondissement" + "\n" +
+                            "9 : Paris, 9eme arrondissement" + "\n" +
+                            "10 : Paris, 10eme arrondissement" + "\n" +
+                            "11 : Paris, 11eme arrondissement" + "\n" +
+                            "12 : Paris, 12eme arrondissement" + "\n" +
+                            "13 : Paris, 13eme arrondissement" + "\n" +
+                            "14 : Paris, 14eme arrondissement" + "\n" +
+                            "15 : Paris, 15eme arrondissement" + "\n" +
+                            "16 : Paris, 16eme arrondissement" + "\n" +
+                            "17 : Paris, 17eme arrondissement" + "\n" +
+                            "18 : Paris, 18eme arrondissement" + "\n" +
+                            "19 : Paris, 19eme arrondissement" + "\n" +
+                            "20 : Paris, 20eme arrondissement" + "\n" +
+                            "21 : Bois de Boulogne" + "\n" +
+                            "22 : Bois de Vincennes" + "\n" +
+                            "23 : Hauts-de-Seine" + "\n" +
+                            "24 : Seine-Saint-Denis" + "\n" +
                             "25 : Val-de-Marne");
                     Scanner c = new Scanner(System.in);
                     int num = c.nextInt();
@@ -583,8 +644,8 @@ public class launchControl {
     }
 
     /**
-     * Paye une facture
      * @auth Bastien
+     * Permet de simuler le payement d'une facture par l'association
      */
     public static void payBill()
     {
@@ -593,25 +654,29 @@ public class launchControl {
 
         while (!condition) {
             try{
-                System.out.print("\n" + "Veuillez indiquer le montant de la facture : ");
+                System.out.print("\n" + "Veuillez renseigner le montant de la facture : ");
                 montant = new Scanner(System.in).nextInt();
             } catch (InputMismatchException e) {
-                System.out.println("Erreur, vous devez rentrer un montant valide.");
+                System.out.println("Erreur, vous devez rentrer un nombre entier.");
             }
 
             condition = true;
             if(montant <= 0) {
-                System.out.println("Erreur, vous devez rentrer un montant valide.");
+                System.out.println("Veuillez faire attention à ce que le montant renseigné soit supérieur à 0.");
                 condition = false;
             }
+
         }
-        System.out.println("Entrez le motif de cette facture");
+        System.out.print("Veuillez renseigner le motif de cette facture : ");
         String motif = new Scanner(System.in).nextLine();
 
+        //Update de l'object statique associationMember
         AssociationDAO.updateDepense(associationMember, montant);
-        ActivityDAO.createNewActivity(associationMember, associationMember.getName() + "a payé une facture de " + montant + " pour motif : +" + motif);
-        System.out.println("Vous avez payé une facture d'un montant de " + montant);
         associationMember = AssociationDAO.getAssociationByMember(currentMember);
+
+        ActivityDAO.createNewActivity(associationMember, associationMember.getName() + " à payé une facture de "+montant+" euros pour le motif suivant : +"+motif);
+
+        System.out.println("Vous avez payé une facture d'un montant de "+montant+" euros pour le motif suivant : "+motif+".");
     }
 
 }

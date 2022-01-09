@@ -103,7 +103,7 @@ public class CotisationDAO {
         return cotisations;
     }
 
-    public static Cotisation getLastMCotisation() {
+    public static Cotisation getLastCotisation() {
 
         Cotisation cotisation = null;
 

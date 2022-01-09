@@ -1,0 +1,24 @@
+Etats des finances pour l'année 2022 : 
+Dépense : 29
+Recette : 60
+Synthèse des activitées pour l'année 2022 : 
+A la date : 01/01/2022
+Le membre Maxime
+Protection des arbres du Grand Paris à reçu une donation de 100 de la part de Martin.
+
+--------------------
+A la date : 09/01/2022
+Le membre Maxime
+Protection des arbres du Grand Parisa payé une facture de 23 euros pour le motif suivant : +test 2
+
+--------------------
+A la date : 09/01/2022
+Le membre Maxime
+Création d'un compte de type : Membre et de login : banane (id = 5).
+
+--------------------
+A la date : 09/01/2022
+Le membre Maxime
+Protection des arbres du Grand Paris à reçu une cotisation de 30 euros de la part de banane.
+
+--------------------
