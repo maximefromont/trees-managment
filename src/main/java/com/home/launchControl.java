@@ -33,12 +33,14 @@ public class launchControl {
 
     private static Member currentMember;
     private static Association associationMember;
+    private static String treeFileName;
 
-    public static void menu(Member memberRecu) {
+    public static void menu(Member memberRecu, String treeFileNameRecu) {
 
         //Initialisation des variable static member et association
         currentMember = memberRecu;
         associationMember = AssociationDAO.getAssociationByMember(currentMember);
+        treeFileName = treeFileNameRecu;
 
         boolean programLife = true;
         while(programLife) {
@@ -114,12 +116,12 @@ public class launchControl {
         exitProgram();
     }
 
-    private static void exitProgram() {
+    public static void exitProgram() {
         System.out.println("\n" + "Merci d'avoir utilisé le programme. Au revoir !");
         System.exit(0);
     }
 
-    /** askForSubvention
+    /**
      * @auth Martin
      * Envoie un mail de demande de subvention
      */
@@ -132,7 +134,7 @@ public class launchControl {
         SendMail.main(("Demande de subvention pour "+associationMember.getName()), message, mailTo);
     }
 
-    /** askForDonation
+    /**
      * @auth Martin
      * Envoie un mail de demande de donnation à tous les donnateurs
      */
@@ -145,7 +147,7 @@ public class launchControl {
         }
     }
 
-    /** initAskFor
+    /**
      * @auth Martin
      * @param type type de demande
      * @return message du meil
@@ -172,7 +174,7 @@ public class launchControl {
         return message;
     }
 
-    /** payCotisation
+    /**
      * @auth Martin & Maxime
      * Demande à l'utlisateur de payer une cotisation ou une donation en fonction de son type
      */
@@ -230,7 +232,7 @@ public class launchControl {
         associationMember = AssociationDAO.getAssociationByMember(currentMember);
     }
 
-    /** displayRGPD
+    /**
      * @auth Martin & Maxime
      * Crée un fichier contenant les informations de l'utilisateur
      */
@@ -256,76 +258,9 @@ public class launchControl {
         }
     }
 
-
     /**
-     * Crée un fichier contenant le rapport d'activité de l'association pour une année
      * @auth Bastien
-     * @param year
-     */
-    private static void activityReportForYear(String year) {
-        ArrayList<Activity> activities = ActivityDAO.getAllActivitiesByYear(year);
-
-        String fileName = associationMember.getName()+"_activity_report_for_year_" + year + ".txt";
-        String encoding = "UTF-8";
-
-        try{
-            PrintWriter writer = new PrintWriter(fileName, encoding);
-            //Finances
-            writer.println("Finances pour l'année " + year);
-            Finance finance = FinanceDAO.getFinanceForYear(associationMember, year);
-            if (finance == null) {
-                writer.println("Pas de finances pour l'année " + year);
-            }
-            else {
-                writer.println("Dépenses : " +finance.getDepense());
-                writer.println("Recettes : " +finance.getRecette());
-            }
-            //Activité
-            writer.println("Rapport d'activité pour l'année " + year);
-            writer.println("--------------------");
-            if (activities.size() == 0)
-            {
-                writer.println("Pas d'activité cette année");
-                writer.println("--------------------");
-            }
-            else {
-                for (Activity activity : activities) {
-                    writer.println(activity.info());
-                    writer.println("--------------------");
-                }
-            }
-            writer.close();
-
-            System.out.println("Un fichier de format txt à été imprimé dans java project.");
-        }
-        catch (IOException e){
-            System.out.println("Une erreur durant l'impression du rapport d'activité à eu lieu.");
-            e.printStackTrace();
-        }
-
-    }
-
-    private static void deleteAccount() {
-        String answer = "";
-        while(!answer.equals("Y") && !answer.equals("N")) {
-            System.out.print("\n" + "Êtes vous sur de vouloir supprimer votre compte (Y/N) : ");
-            answer = new Scanner(System.in).next();
-            if(!answer.equals("Y") && !answer.equals("N")) {
-                System.out.println("Veuillez faire attention à répondre par oui (Y) ou par non (N).");
-            }
-        }
-
-        if(answer.equals("Y")) {
-            MemberDAO.deleteMember(currentMember);
-            exitProgram();
-        }
-        if (answer.equals("N")) {
-            return;
-        }
-    }
-
-    /**
-     * Fonction menu pour obtenir un rapport d'activité
+     * Demande à l'utilisateur de saisir une année et débute l'impression d'un rapport d'activité de l'association
      */
     private static void getActivityReport() {
         int year = 0;
@@ -349,29 +284,98 @@ public class launchControl {
         activityReportForYear(String.valueOf(year));
     }
 
-    /** treeCSV
+    /**
+     * Crée un fichier contenant le rapport d'activité de l'association pour une année
+     * @auth Bastien
+     * @param year
+     */
+    private static void activityReportForYear(String year) {
+        ArrayList<Activity> activities = ActivityDAO.getAllActivitiesByYear(year);
+
+        String fileName = associationMember.getName()+"_activity_report_for_year_" + year + ".txt";
+        String encoding = "UTF-8";
+
+        try{
+            PrintWriter writer = new PrintWriter(fileName, encoding);
+
+            //Finances
+            writer.println("Etats des finances pour l'année "+year+" : ");
+            Finance finance = FinanceDAO.getFinanceForYear(associationMember, year);
+            if (finance == null) {
+                writer.println("Aucune informations sur cette année.");
+            } else {
+                writer.println("Dépense : " +finance.getDepense());
+                writer.println("Recette : " +finance.getRecette());
+            }
+
+            //Activité
+            writer.println("Synthèse des activitées pour l'année "+year+" : ");
+            if (activities.size() == 0)
+            {
+                writer.println("Aucune activitées concernant cette année.");
+            }
+            else {
+                for (Activity activity : activities) {
+                    writer.println(activity.info());
+                    writer.println("--------------------");
+                }
+            }
+            writer.close();
+
+            System.out.println("Un fichier de format txt à été imprimé dans java project.");
+        }
+        catch (IOException e){
+            e.printStackTrace();
+            System.out.println("Une erreur durant l'impression du rapport d'activité à eu lieu.");
+        }
+
+    }
+
+    /**
+     * @auth Maxime
+     * Demande à l'utilisateur si il souhaite supprimer son compte, et si oui, le supprime et quitte le programme
+     */
+    private static void deleteAccount() {
+        String answer = "";
+        while(!answer.equals("Y") && !answer.equals("N")) {
+            System.out.print("\n" + "Êtes vous sur de vouloir supprimer votre compte (Y/N) : ");
+            answer = new Scanner(System.in).next();
+            if(!answer.equals("Y") && !answer.equals("N")) {
+                System.out.println("Veuillez faire attention à répondre par oui (Y) ou par non (N).");
+            }
+        }
+
+        if(answer.equals("Y")) {
+            MemberDAO.deleteMember(currentMember);
+            exitProgram();
+        }
+        if (answer.equals("N")) {
+            return;
+        }
+    }
+
+    /**
      * @auth Martin
-     * @return List comprenants les arbres du CSV
+     * @return Une liste comprenant les arbres du fichier CSV
      */
     private static List<Tree> treesCSV() {
-        List<Tree>retour = new ArrayList<>();
+        List<Tree> arbres = new ArrayList<>();
         try {
-            List<Tree> arbre = new CsvToBeanBuilder(new FileReader("src/main/resources/les-arbres.csv"))
+            arbres = new CsvToBeanBuilder(new FileReader(treeFileName))
                     .withType(Tree.class)
                     .withSeparator(';')
                     .build()
                     .parse();
-            retour=arbre;
         } catch(FileNotFoundException e) {
             System.out.println("Erreur, le fichier 'les-arbres.csv' n'a pas été trouvé.");
             e.printStackTrace();
         }
-        return retour;
+        return arbres;
     }
 
-    /** printTree
+    /**
      * @auth Martin
-     * Imprime dans la consoles les différents arbres
+     * Imprime la liste de tous les abres dans la console (fonction lente)
      */
     public static void printTree() {
         List<Tree> liste = treesCSV();
@@ -380,10 +384,10 @@ public class launchControl {
         }
     }
 
-    /** printTree
+    /**
      * @auth Martin
-     * @param lieu Arrondissement/département dont on veut les arbres
-     * Imprime les arbres dans la console
+     * @param lieu Arrondissement/département
+     * Imprime les arbres d'un certain arrondissement dans la console (fonction lente)
      */
     public static void printTree(String lieu) {
         List<Tree> liste = treesCSV();
@@ -394,7 +398,7 @@ public class launchControl {
         }
     }
 
-    /** Vote
+    /**
      * @auth Martin
      * Permet à un membre de voter pour 5 arbres
      */

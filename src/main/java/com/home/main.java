@@ -5,6 +5,7 @@ import com.association.Association;
 import com.association.AssociationDAO;
 import com.member.*;
 
+import javax.swing.plaf.metal.MetalMenuBarUI;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.InputMismatchException;
@@ -33,21 +34,24 @@ public class main {
             }
         }
 
+        Member member = null;
         switch (answer) {
             case 0:
+                launchControl.exitProgram();
                 break;
             case 1:
-                register();
+                member = register();
                 break;
             case 2:
-                login();
+                member = login();
                 break;
         }
 
+        launchControl.menu(member, args[0]);
+
     }
 
-    private static void register() throws IOException {
-
+    private static Member register() {
         Association association = AssociationDAO.getAssociationById(1); //Association 1 en dur
         boolean type = false;
         String login = "";
@@ -55,6 +59,8 @@ public class main {
         String name = "";
         String birth = "";
         String adress = "";
+
+        //TODO VERIFIER QUE LOGIN = MAIL REGEX
 
         boolean verifLogin = false;
         while(!verifLogin) {
@@ -117,12 +123,11 @@ public class main {
         ActivityDAO.createNewActivity(association, "Création d'un compte de type : " + member.getType() + " et de login : "+member.getLogin() +" (id = "+member.getId()+").");
         System.out.println("\n" + "Bienvenue "+member.getName()+"! Lancement du programme.");
 
-        launchControl.menu(member);
+        return member;
 
     }
 
-    private static void login() {
-
+    private static Member login() {
         System.out.print("\n" + "Bienvenue, veuillez indiquer votre login : ");
         Member member = MemberDAO.getMemberByLogin(new Scanner(System.in).next());
         if(member != null) {
@@ -131,12 +136,14 @@ public class main {
 
             if(password.equals(member.getMdp())) {
                 System.out.println("\n" + "Bienvenue "+member.getName()+" ! Lancement du programme.");
-                launchControl.menu(member);
+                return member;
             } else {
                 System.out.println("Le mot de passe est incorrect.");
             }
         } else {
             System.out.println("L'identifiant est incorrect.");
         }
+
+        return null;
     }
 }
