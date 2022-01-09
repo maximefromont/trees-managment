@@ -86,21 +86,4 @@ public class Member {
                 "adress=" + getAdress() + '\n' +
                 "registrationDate=" + getRegistrationDate();
     }
-
-    /**
-     * Vérifie que chaque membre aie payé sa cotisation. Ils sont radiés sinon.
-     * @auth Bastien
-     */
-    public static void  checkMemberCotisation(){
-
-        String date = DateTimeFormatter.ofPattern("dd/MM/yyyy").format(LocalDateTime.now());
-        ArrayList<Member> members = MemberDAO.getAllMember();
-
-        for(Member member : members) {
-            if(CotisationDAO.getCotisationForMemberByDate(member, date) == null) {
-                System.out.println("Le membre " + member.getName() + " est radié pour non reglement de sa cotisation");
-                MemberDAO.deleteMember(member);
-            }
-        }
-    }
 }

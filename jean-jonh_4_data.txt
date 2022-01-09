@@ -1,0 +1,11 @@
+Member : 
+id=4
+id_association=1
+type=membre
+login=asdf
+mdp=mdp
+name=jean-jonh
+birth=banane
+adress=banane
+registrationDate=09/01/2022
+--------------------

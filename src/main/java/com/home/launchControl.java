@@ -27,18 +27,18 @@ import static com.vote.VoteDAO.getAllVoteForMember;
 
 public class launchControl {
 
-    private static Member member;
+    private static Member currentMember;
     private static Association associationMember;
 
     public static void menu(Member memberRecu) {
 
         //Initialisation des variable static member et association
-        member = memberRecu;
-        associationMember = AssociationDAO.getAssociationByMember(member);
+        currentMember = memberRecu;
+        associationMember = AssociationDAO.getAssociationByMember(currentMember);
 
         boolean programLife = true;
         while(programLife) {
-            if (member.isMember()) {
+            if (currentMember.isMember()) {
                 System.out.print("\n" + "Menu (membre) : " + "\n" +
                         "1 - Payer ma cotisation" + "\n" +
                         "2 - Extraire mes RGPD" + "\n" +
@@ -74,11 +74,11 @@ public class launchControl {
                         getActivityReport();
                         break;
                     case 11:
-                        Member.checkMemberCotisation();
+                        checkMemberCotisation();
                         break;
                 }
             }
-            if (!member.isMember()) {
+            if (!currentMember.isMember()) {
                 System.out.print("\n" + "Menu (doneur) : " + "\n" +
                         "1 - Verser un don" + "\n" +
                         "2 - Extraire mes RGPD" + "\n" +
@@ -113,8 +113,8 @@ public class launchControl {
 
     private static void payCotisation() {
 
-        if(member.isMember()) {
-            if(CotisationDAO.getCotisationForMemberByDate(member, DateTimeFormatter.ofPattern("dd/MM/yyyy").format(LocalDateTime.now())) == null) {
+        if(currentMember.isMember()) {
+            if(CotisationDAO.getCotisationForMemberByDate(currentMember, DateTimeFormatter.ofPattern("dd/MM/yyyy").format(LocalDateTime.now())) == null) {
                 String answer = "";
                 while(!answer.equals("Y") && !answer.equals("N")) {
                     System.out.println("Voulez vous payer votre cotisation de 30 euros (Y/N) : ");
@@ -125,7 +125,7 @@ public class launchControl {
                 }
 
                 if(answer.equals("Y")) {
-                    CotisationDAO.createNewCotisation(member, 30);
+                    CotisationDAO.createNewCotisation(currentMember, 30);
                     System.out.println("\n" + "Voici le résumé de votre cotisation : " + "\n");
                 }
                 if(answer.equals("N")) {
@@ -151,26 +151,26 @@ public class launchControl {
                     System.out.println("Veuillez faire attention à ce que le montant renseigné soit supérieur à 0.");
                 }
             }
-            CotisationDAO.createNewCotisation(member, montant);
+            CotisationDAO.createNewCotisation(currentMember, montant);
             System.out.println("\n" + "Voici le résumé de votre cotisation : " + "\n");
         }
 
         Cotisation cotisation = CotisationDAO.getLastMCotisation();
 
         AssociationDAO.updateRecette(associationMember); //Update de la recette de l'association du membre
-        associationMember = AssociationDAO.getAssociationByMember(member); //Update de la variable static associationMember
+        associationMember = AssociationDAO.getAssociationByMember(currentMember); //Update de la variable static associationMember
 
         System.out.println("\n" + associationMember.toString());
     }
 
     private static void displayRGPD() {
-        String fileName = member.getName()+"_"+member.getId()+"_data.txt";
+        String fileName = currentMember.getName()+"_"+ currentMember.getId()+"_data.txt";
         String encoding = "UTF-8";
         try{
             PrintWriter writer = new PrintWriter(fileName, encoding);
-            writer.println(member.toString());
+            writer.println(currentMember.toString());
             writer.println("--------------------");
-            for(Cotisation cotisation : CotisationDAO.getAllCotisationForMember(member)) {
+            for(Cotisation cotisation : CotisationDAO.getAllCotisationForMember(currentMember)) {
                 writer.println(cotisation.toString());
                 writer.println("\n");
             }
@@ -246,7 +246,7 @@ public class launchControl {
         }
 
         if(answer.equals("Y")) {
-            MemberDAO.deleteMember(member);
+            MemberDAO.deleteMember(currentMember);
             exitProgram();
         }
 
@@ -311,7 +311,7 @@ public class launchControl {
     }
 
     public static void vote() throws FileNotFoundException {
-        ArrayList<Vote> liste = getAllVoteForMember(member);
+        ArrayList<Vote> liste = getAllVoteForMember(currentMember);
         if(liste.size()<5) {
             System.out.println("Voulez vous  avoir la liste des arbres avant de voter (1) ou voter directement (2) ?\n");
             Scanner s = new Scanner(System.in);
@@ -375,21 +375,47 @@ public class launchControl {
                 case 2:
                     System.out.println("Veuillez rentrer les id des 5 arbres (l'ordre n'a pas d'importance)");
                     Scanner s1 = new Scanner(System.in);
-                    VoteDAO.createNewVote(member, s1.nextInt());
+                    VoteDAO.createNewVote(currentMember, s1.nextInt());
                     Scanner s2 = new Scanner(System.in);
-                    VoteDAO.createNewVote(member, s2.nextInt());
+                    VoteDAO.createNewVote(currentMember, s2.nextInt());
                     Scanner s3 = new Scanner(System.in);
-                    VoteDAO.createNewVote(member, s3.nextInt());
+                    VoteDAO.createNewVote(currentMember, s3.nextInt());
                     Scanner s4 = new Scanner(System.in);
-                    VoteDAO.createNewVote(member, s4.nextInt());
+                    VoteDAO.createNewVote(currentMember, s4.nextInt());
                     Scanner s5 = new Scanner(System.in);
-                    VoteDAO.createNewVote(member, s5.nextInt());
+                    VoteDAO.createNewVote(currentMember, s5.nextInt());
                     break;
             }
         }
         else{
             System.out.println("Vous avez déjà voté");
         }
+    }
+
+    /**
+     * Vérifie que chaque membre aie payé sa cotisation. Ils sont radiés sinon.
+     * @auth Bastien
+     */
+    public static void  checkMemberCotisation(){
+        boolean selfDeleteCheck = false;
+
+        String date = DateTimeFormatter.ofPattern("dd/MM/yyyy").format(LocalDateTime.now());
+        ArrayList<Member> members = MemberDAO.getAllMember();
+
+        for(Member member : members) {
+            if(CotisationDAO.getCotisationForMemberByDate(member, date) == null && member.isMember()) {
+                System.out.println("Le membre " + member.getName() + " est radié pour non reglement de sa cotisation");
+                MemberDAO.deleteMember(member);
+                if (member.getId() == currentMember.getId()) {
+                    selfDeleteCheck = true;
+                }
+            }
+        }
+
+        if (selfDeleteCheck) {
+            exitProgram();
+        }
+
     }
 
 }
