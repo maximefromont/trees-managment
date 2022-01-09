@@ -1,5 +1,10 @@
 package com.member;
 
+import com.cotisation.CotisationDAO;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class Member {
@@ -82,16 +87,20 @@ public class Member {
                 "registrationDate=" + getRegistrationDate();
     }
 
-    //Ca sert à quoi ?
-    public static void  auRevoir(){
-        Date dt=new Date();
-        int year=dt.getYear();
-        int current_year=year+1900;
-        /*
-        for(Touts les adhérents){
-            if(member.anneeCotisation<current_year){
-                //Supression BDD
+    /**
+     * Vérifie que chaque membre aie payé sa cotisation. Ils sont radiés sinon.
+     * @auth Bastien
+     */
+    public static void  checkMemberCotisation(){
+
+        String date = DateTimeFormatter.ofPattern("dd/MM/yyyy").format(LocalDateTime.now());
+        ArrayList<Member> members = MemberDAO.getAllMember();
+
+        for(Member member : members) {
+            if(CotisationDAO.getCotisationForMemberByDate(member, date) == null) {
+                System.out.println("Le membre " + member.getName() + " est radié pour non reglement de sa cotisation");
+                MemberDAO.deleteMember(member);
             }
-        } */
+        }
     }
 }

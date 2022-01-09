@@ -47,6 +47,7 @@ public class launchControl {
                         "0 - Quitter le programme" + "\n" +
                         "------ PARTIE TECHNIQUE (pour tester) ------" + "\n" +
                         "10: Exraire le rapport d'activité \n" +
+                        "11: revoquer les membres n'ayant pas payé leur cotisation \n" +
                         "Votre choix : ");
                 Scanner s = new Scanner(System.in);
                 switch (s.nextInt()) {
@@ -71,6 +72,9 @@ public class launchControl {
                         break;
                     case 10:
                         getActivityReport();
+                        break;
+                    case 11:
+                        Member.checkMemberCotisation();
                         break;
                 }
             }
