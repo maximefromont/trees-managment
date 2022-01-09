@@ -49,6 +49,8 @@ CREATE TABLE IF NOT EXISTS public.visite
     id SERIAL PRIMARY KEY,
     id_member integer NOT NULL,
     id_arbre integer NOT NULL,
+	prix integer NOT NULL,
+	compte_rendu VARCHAR(5000),
     FOREIGN KEY(id_member) REFERENCES member(id) ON DELETE CASCADE
 );
 
