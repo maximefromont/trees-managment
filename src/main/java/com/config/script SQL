@@ -2,7 +2,7 @@ DROP TABLE IF EXISTS public.finance;
 DROP TABLE IF EXISTS public.activity;
 DROP TABLE IF EXISTS public.cotisation;
 DROP TABLE IF EXISTS public.vote;
-DROP TABLE IF EXISTS public.member;
+DROP TABLE IF EXISTS public.member CASCADE;
 DROP TABLE IF EXISTS public.association;
 
 CREATE TABLE IF NOT EXISTS public.association
@@ -76,21 +76,14 @@ INSERT INTO association VALUES
 
 INSERT INTO finance VALUES
 (DEFAULT, 1, 15000, 13000, '2021'),
-(DEFAULT, 1, 0, 0, '2022'),
+(DEFAULT, 1, 130, 0, '2022');
 
-INSERT INTO activity VALUES
-(DEFAULT, 1, 'A codé en java', '21/12/2021'),
-(DEFAULT, 1, 'A codé en c++', '30/09/2021'),
-(DEFAULT, 1, 'A codé en python', '05/09/2001'),
-(DEFAULT, 1, 'A jouer à minecraft', '03/12/2020'),
-(DEFAULT, 1, 'A fait de la medecine', '05/09/2020'),
-(DEFAULT, 1, 'A hacker la nasa en python', '07/09/2000');
 
 INSERT INTO member VALUES
-(DEFAULT, 1, true, 'max@gmail.com', 'mdp', 'Maxime', '30/04/2001', '9 rue Marcel Pagnol, Avrillé, 49240', '3/12/2021'),
-(DEFAULT, 2, true, 'martin@gmail.com', 'mdp', 'Martin', 'mdr je sais pas', 'Quelque part à massy', '5/12/2021'),
-(DEFAULT, 1, false, 'bastien@gmail.com', 'mdp', 'Bastien', 'Bon', 'Dans une grotte', '10/12/2021'),
-(DEFAULT, 1, false, 'projetJavaMail@yopmail.com', 'mdp', 'Banane', 'BananeAniversaire', 'BananeLieu', '09/01/2021');
+(DEFAULT, 1, true, 'maxime.fromont@universite-paris-saclay.fr.com', 'ASN2022', 'Maxime', '30/04/2001', '9 rue Marcel Pagnol, Avrillé, 49240', '3/12/2021'),
+(DEFAULT, 1, false, 'martinzs188@gmail.com', '@MoTdEpAsSe1234', 'Martin', '08/02/2001', '4 rue d Australie, 91300 MASSY', '5/12/2021'),
+(DEFAULT, 1, true, 'bastien@gmail.com', 'CEA2022', 'Bastien', '31/12/2001', '10 Downing Street, SW1A LONDON', '10/12/2021'),
+(DEFAULT, 1, false, 'aurelien.max@universite-paris-saclay.fr', '!Pr0fJAVA', 'Aurelien', '', 'Batiment 620, Maison de l Ingenieur, Rue Louis de Broglie, 91190 Orsay', '09/01/2021');
 
 INSERT INTO visite VALUES
 (DEFAULT, 1, 2033334, 100, ''),
@@ -98,14 +91,18 @@ INSERT INTO visite VALUES
 (DEFAULT, 3, 231548, 10, '');
 
 INSERT INTO vote VALUES
-(DEFAULT, 1, 2033334),
-(DEFAULT, 2, 273256),
-(DEFAULT, 3, 231548);
+(DEFAULT, 2, 2018444),
+(DEFAULT, 2, 150858),
+(DEFAULT, 2, 147172),
+(DEFAULT, 2, 160146),
+(DEFAULT, 2, 171884);
 
 INSERT INTO cotisation VALUES
-(DEFAULT, 1, 15, '21/12/2021'),
-(DEFAULT, 2, 30, '21/12/2021'),
-(DEFAULT, 3, 20, '21/12/2021');
+(DEFAULT, 1, 30, '21/12/2021'),
+
+INSERT INTO activity VALUES
+(DEFAULT,1,'Protection des arbres du Grand Paris à reçu une donation de 100 de la part de Martin.','01/01/2022'),
+(DEFAULT,1,'Protection des arbres du Grand Paris à reçu une cotisation de 30 euros de la part de Maxime.'.'09/01/2021');
 
 --SELECT * FROM association;
 SELECT * FROM finance;
