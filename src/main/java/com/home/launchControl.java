@@ -491,6 +491,10 @@ public class launchControl {
         }
     }
 
+    /** resultVote
+     * @auth Martin
+     * Renvoie le résultat du vote des arbres à faire passen en arbre remarquable
+      */
     private static void resultVote(){
         List<Vote> resultbeta = getAllVote();
         List<String> result = new ArrayList<String>();
