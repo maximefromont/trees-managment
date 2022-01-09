@@ -52,8 +52,10 @@ public class launchControl {
                         "4 - Supprimer mon compte membre" + "\n" +
                         "0 - Quitter le programme" + "\n" +
                         "------ PARTIE TECHNIQUE (pour tester) ------" + "\n" +
-                        "10: Exraire le rapport d'activité \n" +
-                        "11: revoquer les membres n'ayant pas payé leur cotisation \n" +
+                        "10 - Exraire le rapport d'activité \n" +
+                        "11 - Revoquer les membres n'ayant pas payé leur cotisation \n" +
+                        "12 - Faire une demande de don" + "\n" +
+                        "13 - Faire une demande de subvention" + "\n" +
                         "Votre choix : ");
                 Scanner s = new Scanner(System.in);
                 switch (s.nextInt()) {
@@ -67,11 +69,7 @@ public class launchControl {
                         displayRGPD();
                         break;
                     case 3:
-                        try {
-                            vote();
-                        } catch (FileNotFoundException e) {
-                            e.printStackTrace();
-                        }
+                        vote();
                         break;
                     case 4:
                         deleteAccount();
@@ -81,6 +79,12 @@ public class launchControl {
                         break;
                     case 11:
                         checkMemberCotisation();
+                        break;
+                    case 12:
+
+                        break;
+                    case 13:
+
                         break;
                 }
             }
@@ -112,7 +116,7 @@ public class launchControl {
     }
 
     private static void exitProgram() {
-        System.out.println("\n" + "Merci d'avoir utilisé le programme. Au revcoir !");
+        System.out.println("\n" + "Merci d'avoir utilisé le programme. Au revoir !");
         System.exit(0);
     }
 
@@ -293,21 +297,21 @@ public class launchControl {
                     .build()
                     .parse();
             retour=arbre;
-        } catch(IOException e) {
+        } catch(FileNotFoundException e) {
             System.out.println("Erreur, le fichier 'les-arbres.csv' n'a pas été trouvé.");
             e.printStackTrace();
         }
         return retour;
     }
 
-    public static void printTree() throws FileNotFoundException {
+    public static void printTree() {
         List<Tree> liste = treesCSV();
         for (int i = 0; i<liste.size();i++){
             System.out.println(liste.get(i).showMe());
         }
     }
 
-    public static void printTree(String lieu) throws FileNotFoundException {
+    public static void printTree(String lieu) {
         List<Tree> liste = treesCSV();
         for (int i = 0; i<liste.size();i++){
             if(Objects.equals(lieu, liste.get(i).getLocation())) {
@@ -316,7 +320,7 @@ public class launchControl {
         }
     }
 
-    public static void vote() throws FileNotFoundException {
+    public static void vote() {
         ArrayList<Vote> liste = getAllVoteForMember(currentMember);
         if(liste.size()<5) {
             System.out.println("Voulez vous  avoir la liste des arbres avant de voter (1) ou voter directement (2) ?\n");
