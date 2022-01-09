@@ -56,11 +56,23 @@ public class Tree {
                 "Circonférence : " + cir +
 
                 "cm - Hauteur : " + height +
-                "m - Quartier : " + location + " | "
+                "m - Quartier : " + location
                 ;
     }
 
     public String getLocation() {
         return location;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getCir() {
+        return cir;
+    }
+
+    public String getHeight() {
+        return height;
     }
 }

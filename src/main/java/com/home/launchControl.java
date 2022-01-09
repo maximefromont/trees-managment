@@ -27,7 +27,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import static com.member.MemberDAO.getAllMemberThatAreDonor;
+import static com.vote.VoteDAO.getAllVote;
 import static com.vote.VoteDAO.getAllVoteForMember;
+import static java.lang.Integer.parseInt;
+import static java.util.Collections.frequency;
 
 public class launchControl {
 
@@ -57,6 +60,7 @@ public class launchControl {
                         "11 - Revoquer les membres n'ayant pas payé leur cotisation \n" +
                         "12 - Faire une demande de don" + "\n" +
                         "13 - Faire une demande de subvention" + "\n" +
+                        "14 - Resultats des votes\n" +
                         "Votre choix : ");
                 Scanner s = new Scanner(System.in);
                 switch (s.nextInt()) {
@@ -86,6 +90,9 @@ public class launchControl {
                         break;
                     case 13:
                         askForSubvention();
+                        break;
+                    case 14:
+                        resultVote();
                         break;
                 }
             }
@@ -155,7 +162,7 @@ public class launchControl {
     private static String initAskFor(String type) {
         //Génaration des rapports d'activitées des deux dernières années
         String year = DateTimeFormatter.ofPattern("yyyy").format(LocalDateTime.now());
-        String lastYear = Integer.toString(Integer.parseInt(year)-1);
+        String lastYear = Integer.toString(parseInt(year)-1);
         activityReportForYear(year);
         activityReportForYear(lastYear);
 
@@ -484,6 +491,59 @@ public class launchControl {
         }
     }
 
+    private static void resultVote(){
+        List<Vote> resultbeta = getAllVote();
+        List<String> result = new ArrayList<String>();
+        for(int i=0;i<resultbeta.size();i++){
+            result.add(String.valueOf(resultbeta.get(i).getId_arbre()));
+        }
+        List<Tree> arbre = treesCSV();
+        Tree first,second = new Tree("-1","-1","-1","-1","-1","-1","-1","-1"),third = new Tree("-1","-1","-1","-1","-1","-1","-1","-1"),fourth = new Tree("-1","-1","-1","-1","-1","-1","-1","-1"),fifth = new Tree("-1","-1","-1","-1","-1","-1","-1","-1");
+        first=arbre.get(0);
+        for (int i=1;i<arbre.size();i++){
+            if(frequency(result, arbre.get(i).getId())>frequency(result, first.getId()) ||
+                    frequency(result, arbre.get(i).getId())==frequency(result, first.getId()) && parseInt(arbre.get(i).getCir())>parseInt(first.getCir()) ||
+                    frequency(result, arbre.get(i).getId())==frequency(result, first.getId()) && parseInt(arbre.get(i).getCir())==parseInt(first.getCir()) && parseInt(arbre.get(i).getHeight())>parseInt(first.getHeight())){
+                fifth=fourth;
+                fourth=third;
+                third=second;
+                second=first;
+                first=arbre.get(i);
+            }
+            else if(frequency(result, arbre.get(i).getId())>frequency(result, second.getId()) ||
+                    frequency(result, arbre.get(i).getId())==frequency(result, second.getId()) && parseInt(arbre.get(i).getCir())>parseInt(second.getCir()) ||
+                    frequency(result, arbre.get(i).getId())==frequency(result, second.getId()) && parseInt(arbre.get(i).getCir())==parseInt(second.getCir()) && parseInt(arbre.get(i).getHeight())>parseInt(second.getHeight())) {
+                fifth = fourth;
+                fourth = third;
+                third = second;
+                second = arbre.get(i);
+            }
+            else if(frequency(result, arbre.get(i).getId())>frequency(result, third.getId()) ||
+                    frequency(result, arbre.get(i).getId())==frequency(result, third.getId()) && parseInt(arbre.get(i).getCir())>parseInt(third.getCir()) ||
+                    frequency(result, arbre.get(i).getId())==frequency(result, third.getId()) && parseInt(arbre.get(i).getCir())==parseInt(third.getCir()) && parseInt(arbre.get(i).getHeight())>parseInt(third.getHeight())) {
+                fifth = fourth;
+                fourth = third;
+                third = arbre.get(i);
+            }
+            else if(frequency(result, arbre.get(i).getId())>frequency(result, fourth.getId()) ||
+                    frequency(result, arbre.get(i).getId())==frequency(result, fourth.getId()) && parseInt(arbre.get(i).getCir())>parseInt(fourth.getCir()) ||
+                    frequency(result, arbre.get(i).getId())==frequency(result, fourth.getId()) && parseInt(arbre.get(i).getCir())==parseInt(fourth.getCir()) && parseInt(arbre.get(i).getHeight())>parseInt(fourth.getHeight())) {
+                fifth = fourth;
+                fourth = arbre.get(i);
+            }
+            else if(frequency(result, arbre.get(i).getId())>frequency(result, fifth.getId()) ||
+                    frequency(result, arbre.get(i).getId())==frequency(result, fifth.getId()) && parseInt(arbre.get(i).getCir())>parseInt(fifth.getCir()) ||
+                    frequency(result, arbre.get(i).getId())==frequency(result, fifth.getId()) && parseInt(arbre.get(i).getCir())==parseInt(fifth.getCir()) && parseInt(arbre.get(i).getHeight())>parseInt(fifth.getHeight())) {
+                fifth = arbre.get(i);
+            }
+        }
+        System.out.println("Resultats :\n" +
+                "1er - "+first.showMe()+", "+frequency(result, first.getId())+" votes\n" +
+                " 2eme - "+second.showMe()+", "+frequency(result, second.getId())+" votes\n" +
+                " 3eme - "+third.showMe()+", "+frequency(result, third.getId())+" votes\n" +
+                " 4eme - "+fourth.showMe()+", "+frequency(result, fourth.getId())+" votes\n" +
+                " 5eme - "+fifth.showMe()+", "+frequency(result, fifth.getId())+" votes\n");
+    }
 
     /**
      * Vérifie que chaque membre aie payé sa cotisation. Ils sont radiés sinon.
