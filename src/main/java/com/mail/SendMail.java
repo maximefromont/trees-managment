@@ -9,7 +9,12 @@ import java.util.Properties;
  * @author Martin
  */
 public class SendMail {
-
+    /** main
+     * @param title Titre du mail
+     * @param txt contenu du mail
+     * @param to destinataire
+     * Envoie un mail au destinataire avec les différentes informations
+     */
     public static void main(String title, String txt, String to) {
 
         final String username = "projetassociationapp3@gmail.com";

@@ -133,10 +133,10 @@ public class main {
                 System.out.println("\n" + "Bienvenue "+member.getName()+" ! Lancement du programme.");
                 launchControl.menu(member);
             } else {
-                System.out.println("Le mot de passe est incorrecte.");
+                System.out.println("Le mot de passe est incorrect.");
             }
         } else {
-            System.out.println("L'identifiant est incorrecte.");
+            System.out.println("L'identifiant est incorrect.");
         }
     }
 }

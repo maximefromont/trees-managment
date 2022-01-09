@@ -25,7 +25,6 @@ public class Association {
     }
 
     /*
-    //Faire une classe erreur budget < 0 pour defraiement
     public void defraiement(int cout,Member... a){}
     public void factures(int fac) throws BalanceException {
         if(getBudget()-(depense+fac)<0){

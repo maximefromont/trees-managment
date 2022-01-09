@@ -29,6 +29,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+import static com.member.MemberDAO.getAllMemberThatAreDonor;
 import static com.vote.VoteDAO.getAllVoteForMember;
 
 public class launchControl {
@@ -82,23 +83,37 @@ public class launchControl {
                         checkMemberCotisation();
                         break;
                     case 12:
-                        SendMail.main("Donnation","","");
-                        break;
-                    case 13:
-                        System.out.println("Donner l'adresse email du contact pour demander une subvention");
-                        Scanner mail = new Scanner(System.in);
+                        List<Member> donor = getAllMemberThatAreDonor();
+                        String message = null;
                         activityReportForYear("2022");
                         activityReportForYear("2021");
-                        String message = null;
                         try {
-                            message = "Bonjour,\nAfin de préserver les différents arbres qui font la beauté de Paris nous faisons appel à vous dans le but d'avoir un subvention afin de pouvoir continuer à préserver ces arbre" +
+                            message = "Bonjour,\nAfin de préserver les différents arbres qui font la beauté de Paris nous faisons appel à vous dans le but d'obtenir des donnations afin de pouvoir continuer à préserver ces arbre" +
                                     "\n Voici nos rapports d'activité ainsi que la syntyhese de l'exercice précédent : \n\n\n"+
                                     Files.readString(Path.of("activity_report_for_year_2022.txt"))+"\n________________________________________________________\n"+
                                     Files.readString(Path.of("activity_report_for_year_2021.txt"));
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-                        SendMail.main("Demande de subvention",message,"projetjavamail@yopmail.com");
+                        for(int i=0; i<donor.size();i++) {
+                            SendMail.main("Donnation", message, donor.get(i).getLogin());
+                        }
+                        break;
+                    case 13:
+                        System.out.println("Donner l'adresse email du contact pour demander une subvention");
+                        Scanner mail = new Scanner(System.in);
+                        activityReportForYear("2022");
+                        activityReportForYear("2021");
+                        String messagesub=null;
+                        try {
+                             messagesub = "Bonjour,\nAfin de préserver les différents arbres qui font la beauté de Paris nous faisons appel à vous dans le but d'avoir un subvention afin de pouvoir continuer à préserver ces arbre" +
+                                    "\n Voici nos rapports d'activité ainsi que la syntyhese de l'exercice précédent : \n\n\n"+
+                                    Files.readString(Path.of("activity_report_for_year_2022.txt"))+"\n________________________________________________________\n"+
+                                    Files.readString(Path.of("activity_report_for_year_2021.txt"));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        SendMail.main("Demande de subvention",messagesub,"projetjavamail@yopmail.com");
                         break;
                 }
             }
@@ -187,6 +202,10 @@ public class launchControl {
         System.out.println("\n" + associationMember.toString());
     }
 
+    /** displayRGPD
+     * @auth Martin & Maxime
+     * Créé un fichier avec les information de al personne
+     */
     private static void displayRGPD() {
         String fileName = currentMember.getName()+"_"+ currentMember.getId()+"_data.txt";
         String encoding = "UTF-8";
@@ -301,7 +320,10 @@ public class launchControl {
         activityReportForYear(String.valueOf(year));
     }
 
-
+    /** treeCSV
+     * @auth Martin
+     * @return List comprenants les arbres du CSV
+     */
     private static List<Tree> treesCSV() {
         List<Tree>retour = new ArrayList<>();
         try {
@@ -318,6 +340,10 @@ public class launchControl {
         return retour;
     }
 
+    /** printTree
+     * @auth Martin
+     * Imprime dans la consoles les différents arbres
+     */
     public static void printTree() {
         List<Tree> liste = treesCSV();
         for (int i = 0; i<liste.size();i++){
@@ -325,6 +351,11 @@ public class launchControl {
         }
     }
 
+    /** printTree
+     * @auth Martin
+     * @param lieu Arrondissement/département dont on veut les arbres
+     * Imprime les arbres dans la console
+     */
     public static void printTree(String lieu) {
         List<Tree> liste = treesCSV();
         for (int i = 0; i<liste.size();i++){
@@ -334,6 +365,10 @@ public class launchControl {
         }
     }
 
+    /** Vote
+     * @auth Martin
+     * Permet à un membre de voter pour 5 arbres
+     */
     public static void vote() {
         ArrayList<Vote> liste = getAllVoteForMember(currentMember);
         if(liste.size()<5) {

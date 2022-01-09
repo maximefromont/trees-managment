@@ -6,7 +6,10 @@ import com.opencsv.bean.CsvBindByPosition;
  * @author Martin
  */
 public class Tree {
-
+    /** @CsvBindByPosition
+     * @param position = x
+     * Automatise la création de l'objet à partir du CSV
+     */
     @CsvBindByPosition(position = 0)
     private String id;
 
@@ -31,7 +34,7 @@ public class Tree {
     @CsvBindByPosition(position = 15)
     private String remarquable;
 
-    public Tree(){}
+    public Tree(){} //Permet l'automatisation CSV en objet Tree
     public Tree(String idcsv,String circsv,String heightcsv,String loccsv,String nom, String ty, String spe, String remcsv){
         id=idcsv;
         cir=circsv;
@@ -43,6 +46,10 @@ public class Tree {
         remarquable=remcsv;
     }
 
+    /** showMe
+     * Affichage propre d'un arbre
+     * @return
+     */
     public String showMe() {
         return "n°" + id + " - " + name + " / Genre : " + type +
                 " / Espece : " + speicies + " - " +
