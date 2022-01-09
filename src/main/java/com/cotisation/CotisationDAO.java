@@ -38,7 +38,7 @@ public class CotisationDAO {
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("SELECT * FROM public.cotisation");
             while (resultSet.next()) {
-                cotisations.add(new Cotisation(resultSet.getInt(1), resultSet.getInt(2), resultSet.getInt(3), resultSet.getString(4), resultSet.getBoolean(5)));
+                cotisations.add(new Cotisation(resultSet.getInt(1), resultSet.getInt(2), resultSet.getInt(3), resultSet.getString(4)));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -57,7 +57,7 @@ public class CotisationDAO {
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("SELECT * FROM public.cotisation as co INNER JOIN MEMBER as me ON co.id_member=me.id WHERE me.id_association="+association.getId());
             while (resultSet.next()) {
-                cotisations.add(new Cotisation(resultSet.getInt(1), resultSet.getInt(2), resultSet.getInt(3), resultSet.getString(4), resultSet.getBoolean(5)));
+                cotisations.add(new Cotisation(resultSet.getInt(1), resultSet.getInt(2), resultSet.getInt(3), resultSet.getString(4)));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -75,8 +75,8 @@ public class CotisationDAO {
         try {
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("SELECT * FROM public.cotisation WHERE id="+id);
-            resultSet.next();
-            cotisation = new Cotisation(resultSet.getInt(1), resultSet.getInt(2), resultSet.getInt(3), resultSet.getString(4), resultSet.getBoolean(5));
+            if(resultSet.next())
+                cotisation = new Cotisation(resultSet.getInt(1), resultSet.getInt(2), resultSet.getInt(3), resultSet.getString(4));
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -94,7 +94,7 @@ public class CotisationDAO {
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("SELECT * FROM public.cotisation WHERE id_member="+member.getId());
             while (resultSet.next()) {
-                cotisations.add(new Cotisation(resultSet.getInt(1), resultSet.getInt(2), resultSet.getInt(3), resultSet.getString(4), resultSet.getBoolean(5)));
+                cotisations.add(new Cotisation(resultSet.getInt(1), resultSet.getInt(2), resultSet.getInt(3), resultSet.getString(4)));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -103,7 +103,43 @@ public class CotisationDAO {
         return cotisations;
     }
 
-    public static void createNewCotisation(Member member, int prix, boolean paid) {
+    public static Cotisation getLastMCotisation() {
+
+        Cotisation cotisation = null;
+
+        Connection connection = getConnection();
+
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM public.cotisation ORDER BY id DESC LIMIT 1");
+            if(resultSet.next())
+                cotisation = new Cotisation(resultSet.getInt(1), resultSet.getInt(2), resultSet.getInt(3), resultSet.getString(4));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return cotisation;
+    }
+
+    public static Cotisation getCotisationForMemberByDate(Member member, String date) {
+
+        Cotisation cotisation = null;
+
+        Connection connection = getConnection();
+
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM public.cotisation WHERE id_member="+member.getId()+" and (DATE_PART('year', date::date) - DATE_PART('year', '"+date+"'::date))<0;");
+            if(resultSet.next())
+                cotisation = new Cotisation(resultSet.getInt(1), resultSet.getInt(2), resultSet.getInt(3), resultSet.getString(4));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return cotisation;
+    }
+
+    public static void createNewCotisation(Member member, int prix) {
 
         Connection connection = getConnection();
 
@@ -112,7 +148,6 @@ public class CotisationDAO {
             preparedStatement.setInt(1, member.getId());
             preparedStatement.setInt(2, prix);
             preparedStatement.setString(3, DateTimeFormatter.ofPattern("dd/MM/yyyy").format(LocalDateTime.now())); //Date à l'instant
-            preparedStatement.setBoolean(4, paid);
             preparedStatement.execute();
 
         } catch (SQLException e) {

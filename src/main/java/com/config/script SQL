@@ -58,7 +58,6 @@ CREATE TABLE IF NOT EXISTS public.cotisation
     id_member integer NOT NULL,
     prix integer NOT NULL,
     date varchar(250) NOT NULL,
-    paid boolean DEFAULT false,
     FOREIGN KEY(id_member) REFERENCES member(id) ON DELETE CASCADE
 );
 
@@ -91,9 +90,9 @@ INSERT INTO vote VALUES
 (DEFAULT, 3, 231548);
 
 INSERT INTO cotisation VALUES
-(DEFAULT, 1, 15, '21/12/2021', true),
-(DEFAULT, 2, 30, '21/12/2021', false),
-(DEFAULT, 3, 20, '21/12/2021', false);
+(DEFAULT, 1, 15, '21/12/2021'),
+(DEFAULT, 2, 30, '21/12/2021'),
+(DEFAULT, 3, 20, '21/12/2021');
 
 --SELECT * FROM association;
 SELECT * FROM finance;
