@@ -119,17 +119,25 @@ public class launchControl {
         System.exit(0);
     }
 
+    /** askForSubvention
+     * @auth Martin
+     * Envoie un mail de demande de subvention
+     */
     private static void askForSubvention() {
         System.out.print("Veuillez renseigner l'adresse email du contact auquel demander une subvention : ");
         String mailTo = new Scanner(System.in).next();
 
-        String message = initAskFor();
+        String message = initAskFor("subvention");
 
         SendMail.main(("Demande de subvention pour "+associationMember.getName()), message, mailTo);
     }
 
+    /** askForDonation
+     * @auth Martin
+     * Envoie un mail de demande de donnation à tous les donnateurs
+     */
     private static void askForDonation() {
-        String message = initAskFor();
+        String message = initAskFor("donation");
 
         List<Member> donors = getAllMemberThatAreDonor();
         for(int i=0; i<donors.size();i++) {
@@ -137,7 +145,12 @@ public class launchControl {
         }
     }
 
-    private static String initAskFor() {
+    /** initAskFor
+     * @auth Martin
+     * @param type type de demande
+     * @return message du meil
+     */
+    private static String initAskFor(String type) {
         //Génaration des rapports d'activitées des deux dernières années
         activityReportForYear("2022");
         activityReportForYear("2021");
@@ -145,7 +158,7 @@ public class launchControl {
         String message = "";
         try {
             message = "Bonjour madame, monsieur.\n" +
-                    "Afin de préserver tous les arbres qui font la beauté de Paris, nous faisons appel à vous dans l'objectif d'obtenir une subvention.\n" +
+                    "Afin de préserver tous les arbres qui font la beauté de Paris, nous faisons appel à vous dans l'objectif d'obtenir une "+type+".\n" +
                     "Voici nos rapports d'activités des deux dernières années contenant chacun une synthèse : \n\n\n"+
                     Files.readString(Path.of("activity_report_for_year_2022.txt"))+"\n________________________________________________________\n"+
                     Files.readString(Path.of("activity_report_for_year_2021.txt"));
