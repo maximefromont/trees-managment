@@ -54,7 +54,7 @@ public class VoteDAO {
 
         try {
             Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM public.vote WHERE member_id="+member.getId());
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM public.vote WHERE id_member="+member.getId());
             while (resultSet.next()) {
                 votes.add(new Vote(resultSet.getInt(1), resultSet.getInt(2), resultSet.getInt(3)));
             }
