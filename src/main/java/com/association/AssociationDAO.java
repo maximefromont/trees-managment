@@ -12,6 +12,10 @@ import com.member.Member;
 
 public class AssociationDAO {
 
+    /**
+     * @auth Maxime
+     * @return Connection à la base de donnée
+     */
     private static Connection getConnection() {
 
         Connection connection = null;
@@ -29,6 +33,10 @@ public class AssociationDAO {
         return connection;
     }
 
+    /**
+     * @auth Maxime
+     * @return Toutes les associations
+     */
     public static ArrayList<Association> getAllAssociation() {
 
         ArrayList<Association> associations = new ArrayList<Association>();
@@ -48,6 +56,11 @@ public class AssociationDAO {
         return associations;
     }
 
+    /**
+     * @auth Maxime
+     * @param member
+     * @return association du membre
+     */
     public  static  Association getAssociationByMember(Member member) {
 
         Connection connection = getConnection();
@@ -66,6 +79,11 @@ public class AssociationDAO {
 
     }
 
+    /**
+     * @auth Maxime
+     * @param id
+     * @return ASssotiation aen fonction de son id
+     */
     public  static  Association getAssociationById(int id) {
 
         Connection connection = getConnection();
@@ -84,6 +102,10 @@ public class AssociationDAO {
 
     }
 
+    /**
+     * @auth Maxime
+     * @param association met à jour la recette de l'association
+     */
     public static void updateRecette(Association association) {
 
         Connection connection = getConnection();
@@ -105,6 +127,11 @@ public class AssociationDAO {
 
     }
 
+    /**
+     * @auth
+     * @param association
+     * @param montant met à jour les dépenses de l'association
+     */
     public static void updateDepense(Association association, int montant) {
 
         Connection connection = getConnection();

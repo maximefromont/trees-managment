@@ -10,7 +10,10 @@ import com.association.Association;
 import com.config.*;
 
 public class MemberDAO {
-
+    /**
+     * @auth Maxime
+     * @return Connecte à la base de donnée
+     */
     private static Connection getConnection() {
 
         Connection connection = null;
@@ -28,6 +31,10 @@ public class MemberDAO {
         return connection;
     }
 
+    /**
+     * @auth Maxime
+     * @return tous les membres
+     */
     public static ArrayList<Member> getAllMember() {
 
         ArrayList<Member> members = new ArrayList<Member>();
@@ -48,6 +55,10 @@ public class MemberDAO {
         return members;
     }
 
+    /**
+     * @auth Maxime
+     * @return Tous les membre donneurs
+     */
     public static ArrayList<Member> getAllMemberThatAreDonor() {
 
         ArrayList<Member> members = new ArrayList<Member>();
@@ -67,7 +78,12 @@ public class MemberDAO {
 
         return members;
     }
-    
+
+    /**
+     * @aut Maxime
+     * @param id
+     * @return un membre en fonction de son id
+     */
     public static Member getMemberById(int id) {
         
         Member member = null;
@@ -87,6 +103,11 @@ public class MemberDAO {
         return member;
     }
 
+    /**
+     * @auth Maxime
+     * @param login
+     * @return recupère un membre en fonction de son login
+     */
     public static Member getMemberByLogin(String login) {
 
         Member member = null;
@@ -106,6 +127,10 @@ public class MemberDAO {
         return member;
     }
 
+    /**
+     * @auth Maxime
+     * @return récupère le dernier membre
+     */
     public static Member getLastMember() {
 
         Member member = null;
@@ -125,6 +150,17 @@ public class MemberDAO {
         return member;
     }
 
+    /**
+     * @auth Maxime
+     * @param association
+     * @param type
+     * @param login
+     * @param mdp
+     * @param name
+     * @param birth
+     * @param adress
+     * Cree un membre dans la base de donnée
+     */
     public static void createNewMember(Association association, boolean type, String login, String mdp, String name, String birth, String adress) {
 
         Connection connection = getConnection();
@@ -145,6 +181,11 @@ public class MemberDAO {
         }
     }
 
+    /**
+     * @auth Maxime
+     * @param member
+     * supprime un memebre dde la base de donnée
+     */
     public static void deleteMember(Member member) {
 
         Connection connection = getConnection();

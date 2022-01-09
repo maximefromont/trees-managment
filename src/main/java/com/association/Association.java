@@ -1,8 +1,5 @@
 package com.association;
 
-import com.exceptions.BalanceException;
-import com.member.Member;
-
 public class Association {
 
     private int id;
